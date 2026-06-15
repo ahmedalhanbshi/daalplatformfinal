@@ -1,0 +1,21 @@
+{
+    "watch": [
+        "src",
+        "prisma"
+    ],
+    "ext": "ts,json",
+    "ignore": [
+        "*.log",
+        ".dev.out.log",
+        ".dev.err.log",
+        "dist/*",
+        "uploads/*"
+    ],
+    "ts-node": {
+        "require": [
+            "tsconfig-paths/register"
+        ],
+        "transpileOnly": true,
+        "files": true
+    }
+}

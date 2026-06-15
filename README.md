@@ -1,0 +1,516 @@
+# Database Schema
+
+هذا الملف يحتوي على مخطط قاعدة البيانات (Prisma Schema) المستخدم في المنصة، وذلك بعد إزالة جميع الحقول غير المستخدمة التي تم مناقشتها مسبقاً.
+
+```prisma
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [btree_gist]
+}
+
+model User {
+  id                    String          @id @default(uuid())
+  name                  String
+  email                 String          @unique
+  password              String
+  phone                 String?
+  role                  UserRole        @default(STUDENT)
+  status                UserStatus      @default(PENDING_VERIFICATION)
+  emailVerified         Boolean         @default(false) @map("email_verified")
+  failedLoginAttempts   Int             @default(0) @map("failed_login_attempts")
+  lockUntil             DateTime?       @map("lock_until")
+  avatar                String?
+  deletedAt             DateTime?       @map("deleted_at")
+  createdAt             DateTime        @default(now()) @map("created_at")
+  updatedAt             DateTime        @updatedAt @map("updated_at")
+  announcements         Announcement[]
+  bankAccounts          BankAccount[]
+  coursesAsTrainer      Course[]        @relation("TrainerCourses")
+  enrollments           Enrollment[]
+  institute             Institute?
+  notifications         Notification[]
+  tokens                Token[]
+  trainerProfile        TrainerProfile?
+  wishlists             Wishlist[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Token {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  tokenHash String   @map("token_hash")
+  type      String
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tokens")
+}
+
+model TrainerProfile {
+  id                 String             @id @default(uuid())
+  userId             String             @unique @map("user_id")
+  bio                String?
+  cvUrl              String?            @map("cv_url")
+  specialties        String[]
+  certificatesUrls   String[]           @map("certificates_urls")
+  verificationStatus VerificationStatus @default(PENDING) @map("verification_status")
+  rejectionReason    String?            @map("rejection_reason")
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("trainer_profiles")
+}
+
+model Institute {
+  id                 String             @id @default(uuid())
+  userId             String             @unique @map("user_id")
+  name               String
+  description        String?
+  email              String?
+  phone              String?
+  address            String?
+  logo               String?
+  website            String?
+  locationUrl        String?            @map("location_url")
+  licenseNumber      String?            @map("license_number")
+  licenseDocumentUrl String?            @map("license_document_url")
+  features           String[]           @default([])
+  verificationStatus VerificationStatus @default(PENDING) @map("verification_status")
+  rejectionReason    String?            @map("rejection_reason")
+  deletedAt          DateTime?          @map("deleted_at")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+  bankAccounts       BankAccount[]
+  courses            Course[]
+  staff              InstituteStaff[]
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rooms              Room[]
+
+  @@map("institutes")
+}
+
+model BankAccount {
+  id            String     @id @default(uuid())
+  bankName      String     @map("bank_name")
+  accountName   String     @map("account_name")
+  accountNumber String     @map("account_number")
+  iban          String?
+  isActive      Boolean    @default(true) @map("is_active")
+  instituteId   String?    @map("institute_id")
+  trainerId     String?    @map("trainer_id")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+  institute     Institute? @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  trainer       User?      @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@map("bank_accounts")
+}
+
+model InstituteStaff {
+  id          String      @id @default(uuid())
+  name        String
+  email       String?
+  phone       String?
+  bio         String?
+  avatar      String?
+  specialties String[]
+  status      StaffStatus @default(ACTIVE)
+  joinedAt    DateTime    @default(now()) @map("joined_at")
+  notes       String?
+  instituteId String      @map("institute_id")
+  institute   Institute   @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+
+  @@map("institute_staff")
+}
+
+model CourseCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  courses     Course[]
+
+  @@map("course_categories")
+}
+
+model Course {
+  id               String          @id @default(uuid())
+  title            String
+  description      String?
+  shortDescription String?         @map("short_description")
+  price            Decimal
+  duration         Int
+  startDate        DateTime?       @map("start_date")
+  endDate          DateTime?       @map("end_date")
+  minStudents      Int             @default(1) @map("min_students")
+  maxStudents      Int             @map("max_students")
+  status           CourseStatus    @default(DRAFT)
+  bookingTrigger   BookingTrigger  @default(IMMEDIATE) @map("booking_trigger")
+  image            String?
+  prerequisites    String?
+  objectives       String[]
+  tags             String[]
+  staffTrainerIds  String[]        @default([]) @map("staff_trainer_ids")
+  trainerId        String?         @map("trainer_id")
+  instituteId      String?         @map("institute_id")
+  categoryId       String?         @map("category_id")
+  deletedAt        DateTime?       @map("deleted_at")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  updatedAt        DateTime        @updatedAt @map("updated_at")
+  announcements    Announcement[]
+  category         CourseCategory? @relation(fields: [categoryId], references: [id])
+  institute        Institute?      @relation(fields: [instituteId], references: [id])
+  trainer          User?           @relation("TrainerCourses", fields: [trainerId], references: [id], onDelete: Restrict)
+  enrollments      Enrollment[]
+  roomBookings     RoomBooking[]
+  sessions         Session[]
+  wishlists        Wishlist[]
+
+  @@map("courses")
+}
+
+model Room {
+  id           String        @id @default(uuid())
+  name         String
+  capacity     Int
+  location     String?
+  locationUrl  String?       @map("location_url")
+  type         String        @default("قاعة محاضرات")
+  description  String?
+  pricePerHour Decimal       @map("price_per_hour")
+  facilities   String[]
+  image        String?
+  isActive     Boolean       @default(true) @map("is_active")
+  instituteId  String        @map("institute_id")
+  availability Json?         @map("availability")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime?     @updatedAt @map("updated_at")
+  bookings     RoomBooking[]
+  institute    Institute     @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  sessions     Session[]
+
+  @@map("rooms")
+}
+
+model RoomBooking {
+  id               String            @id @default(uuid())
+  bookingMode      BookingMode       @map("booking_mode")
+  startDate        DateTime          @map("start_date") @db.Date
+  endDate          DateTime          @map("end_date") @db.Date
+  selectedDays     DayOfWeek[]       @map("selected_days")
+  defaultStartTime DateTime          @map("default_start_time") @db.Time(6)
+  defaultEndTime   DateTime          @map("default_end_time") @db.Time(6)
+  status           RoomBookingStatus @default(PENDING_PAYMENT)
+  purpose          String?
+  notes            String?
+  rejectionReason  String?           @map("rejection_reason")
+  totalPrice       Decimal           @map("total_price")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  roomId           String            @map("room_id")
+  requestedById    String?           @map("requested_by_id")
+  approvedById     String?           @map("approved_by_id")
+  courseId         String?           @map("course_id")
+  payments         Payment[]
+  approvedBy       User?             @relation("ApprovedBookings", fields: [approvedById], references: [id])
+  course           Course?           @relation(fields: [courseId], references: [id])
+  requestedBy      User?             @relation("RequestedBookings", fields: [requestedById], references: [id])
+  room             Room              @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sessions         Session[]
+
+  @@map("room_bookings")
+}
+
+model Session {
+  id            String        @id @default(uuid())
+  startTime     DateTime      @map("start_time")
+  endTime       DateTime      @map("end_time")
+  type          SessionType   @default(ONLINE)
+  status        SessionStatus @default(SCHEDULED)
+  meetingLink   String?       @map("meeting_link")
+  courseId      String?       @map("course_id")
+  roomBookingId String?       @map("room_booking_id")
+  roomId        String?       @map("room_id")
+  location      String?
+  topic         String?
+  course        Course?       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  roomBooking   RoomBooking?  @relation(fields: [roomBookingId], references: [id])
+  room          Room?         @relation(fields: [roomId], references: [id])
+
+  @@map("sessions")
+}
+
+model Enrollment {
+  id                 String           @id @default(uuid())
+  enrolledAt         DateTime         @default(now()) @map("enrolled_at")
+  status             EnrollmentStatus @default(PRELIMINARY)
+  cancellationReason String?          @map("cancellation_reason")
+  rejectionReason    String?          @map("rejection_reason")
+  rejectedAt         DateTime?        @map("rejected_at")
+  rejectedById       String?          @map("rejected_by_id")
+  studentId          String           @map("student_id")
+  courseId           String           @map("course_id")
+  deletedAt          DateTime?        @map("deleted_at")
+  course             Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student            User             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  payments           Payment[]
+
+  @@unique([studentId, courseId])
+  @@map("enrollments")
+}
+
+model Payment {
+  id               String        @id @default(uuid())
+  amount           Decimal
+  currency         String        @default("YER")
+  depositSlipImage String?       @map("deposit_slip_image")
+  notes            String?
+  status           PaymentStatus @default(PENDING_REVIEW)
+  reviewedBy       String?       @map("reviewed_by")
+  reviewedAt       DateTime?     @map("reviewed_at")
+  rejectionReason  String?       @map("rejection_reason")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  enrollmentId     String?       @map("enrollment_id")
+  roomBookingId    String?       @map("room_booking_id")
+  enrollment       Enrollment?   @relation(fields: [enrollmentId], references: [id])
+  roomBooking      RoomBooking?  @relation(fields: [roomBookingId], references: [id])
+
+  @@map("payments")
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  studentId String   @map("student_id")
+  courseId  String   @map("course_id")
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+  @@map("wishlists")
+}
+
+model Announcement {
+  id             String               @id @default(uuid())
+  title          String
+  message        String
+  targetAudience AnnouncementAudience @default(ALL) @map("target_audience")
+  category       AnnouncementCategory @default(GENERAL)
+  status         AnnouncementStatus   @default(DRAFT)
+  scheduledAt    DateTime?            @map("scheduled_at")
+  sentAt         DateTime?            @map("sent_at")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  senderId       String?              @map("sender_id")
+  recipientId    String?              @map("recipient_id")
+  recipientIds   String[]             @default([]) @map("recipient_ids")
+  courseId       String?              @map("course_id")
+  course         Course?              @relation(fields: [courseId], references: [id])
+  sender         User?                @relation(fields: [senderId], references: [id])
+  recipient      User?                @relation("AnnouncementRecipient", fields: [recipientId], references: [id])
+
+  @@map("announcements")
+}
+
+model Notification {
+  id              String           @id @default(uuid())
+  type            NotificationType
+  title           String?
+  message         String?
+  actionUrl       String?          @map("action_url")
+  isRead          Boolean          @default(false) @map("is_read")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  relatedEntityId String?          @map("related_entity_id")
+  userId          String           @map("user_id")
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id          String      @id @default(uuid())
+  action      AuditAction
+  entityName  String      @map("entity_name")
+  entityId    String      @map("entity_id")
+  description String?
+  performedBy String?     @map("performed_by")
+  performedAt DateTime    @default(now()) @map("performed_at")
+  performer   User?       @relation(fields: [performedBy], references: [id])
+
+  @@map("audit_logs")
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String   @unique
+  color     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("tags")
+}
+
+model SystemSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("system_settings")
+}
+
+enum UserRole {
+  STUDENT
+  TRAINER
+  INSTITUTE_ADMIN
+  PLATFORM_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CourseStatus {
+  DRAFT
+  PENDING_MINIMUM
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  REJECTED
+  PENDING_REVIEW
+}
+
+enum BookingTrigger {
+  IMMEDIATE
+  FLEXIBLE
+}
+
+enum EnrollmentStatus {
+  PRELIMINARY
+  PRELIMINARY_APPROVED
+  PENDING_PAYMENT
+  ACTIVE
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum SessionType {
+  ONLINE
+  IN_PERSON
+  HYBRID
+}
+
+enum SessionStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+enum BookingMode {
+  UNIFIED_TIME
+  CUSTOM_TIME
+}
+
+enum RoomBookingStatus {
+  PENDING_PAYMENT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  APPROVE
+  REJECT
+  CANCEL
+}
+
+enum NotificationType {
+  COURSE_ENROLLMENT
+  ENROLLMENT_PRELIMINARY_ACCEPTED
+  PRELIMINARY_ACCEPTED_WAITING
+  ENROLLMENT_FINAL_ACCEPTED
+  ENROLLMENT_REJECTED
+  PAYMENT_APPROVED
+  PAYMENT_REJECTED
+  PAYMENT_RECEIPT_SUBMITTED
+  MINIMUM_REACHED
+  COURSE_READY_FOR_PAYMENT
+  SESSION_REMINDER
+  SESSION_CANCELLED
+  BOOKING_STATUS_CHANGE
+  BOOKING_REJECTED
+  NEW_ANNOUNCEMENT
+  ANNOUNCEMENT_GENERAL
+  ANNOUNCEMENT_EVENT
+  ANNOUNCEMENT_MAINTENANCE
+  ANNOUNCEMENT_URGENT
+  ACCOUNT_APPROVED
+  ACCOUNT_REJECTED
+  NEW_TRAINER_APPLICATION
+  NEW_INSTITUTE_APPLICATION
+  NEW_BOOKING_REQUEST
+}
+
+enum DayOfWeek {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+enum StaffStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum AnnouncementAudience {
+  ALL
+  STUDENTS
+  TRAINERS
+  INSTITUTES
+  SINGLE_USER
+  SPECIFIC_USERS
+}
+
+enum AnnouncementCategory {
+  GENERAL
+  EVENT
+  MAINTENANCE
+  URGENT
+}
+
+enum AnnouncementStatus {
+  DRAFT
+  SCHEDULED
+  SENT
+}
+```

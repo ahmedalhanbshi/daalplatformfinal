@@ -1,0 +1,25 @@
+{
+  "message": "يجب اختيار مدرب واحد على الأقل",
+  "stack": "Error: يجب اختيار مدرب واحد على الأقل\n    at InstituteService.createCourse (C:\\Users\\Hammam\\Desktop\\daalplatform-main\\auth-backend\\src\\services\\institute.service.ts:2518:19)\n    at async createCourse (C:\\Users\\Hammam\\Desktop\\daalplatform-main\\auth-backend\\src\\controllers\\institute.controller.ts:529:28)",
+  "payload": {
+    "title": "lmvlvr",
+    "categoryId": "0dcf05ad-c04a-4040-9fd1-9220c7f2d659",
+    "trainerIds": "[]",
+    "shortDescription": "nvkfndvkdf",
+    "description": "knvkfnv",
+    "deliveryType": "",
+    "price": "1000",
+    "minStudents": "2",
+    "maxStudents": "10",
+    "isFree": "false",
+    "hallId": "",
+    "objectives": "[]",
+    "prerequisites": "[]",
+    "tags": "[]",
+    "status": "DRAFT",
+    "startDate": "",
+    "endDate": "",
+    "duration": "1",
+    "sessions": "[]"
+  }
+}

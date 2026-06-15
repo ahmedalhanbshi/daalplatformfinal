@@ -1,0 +1,17 @@
+node_modules
+.next/
+.logs/
+.local-postgres/
+*.log
+build.log
+tsconfig.tsbuildinfo
+.env
+.env.*
+!.env.example
+auth-backend/dist/
+auth-backend/uploads/
+auth-backend/.env
+auth-backend/.env.*
+!auth-backend/.env.example
+.env
+.env.local
