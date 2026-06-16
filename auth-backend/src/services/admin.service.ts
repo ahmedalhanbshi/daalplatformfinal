@@ -64,7 +64,7 @@ export class AdminService {
         });
 
         if (!trainerProfile) {
-            throw new Error('ا�„�…�„ف الشخصي للمدرب غير موجود');
+            throw new Error('الملف الشخصي للمدرب غير موجود');
         }
 
         // Update trainer profile verification status
@@ -100,7 +100,7 @@ export class AdminService {
             userId: trainerProfile.userId,
             type: 'ACCOUNT_APPROVED',
             title: 'تم قبول حسابك كمدرب',
-            message: 'تهانينا! تمت مراجعة �…�„ف�ƒ الشخصي �ˆا�„�…�ˆاف�‚ة عليه. يمكنك الآن البدء ف�Š إنشاء دوراتك.',
+            message: 'تهانينا! تمت مراجعة ملفك الشخصي والموافقة عليه. يمكنك الآن البدء في إنشاء دوراتك.',
             actionUrl: '/trainer/dashboard',
             emailFn: trainerProfile.user.email ? () => mailerService.sendAccountApproved(trainerProfile.user.email, trainerProfile.user.name, 'مدرب') : undefined,
             whaFn: trainerProfile.user.phone ? () => whatsAppService.notifyAccountApproved(trainerProfile.user.phone!, trainerProfile.user.name, 'مدرب') : undefined,
@@ -119,7 +119,7 @@ export class AdminService {
         });
 
         if (!trainerProfile) {
-            throw new Error('ا�„�…�„ف الشخصي للمدرب غير موجود');
+            throw new Error('الملف الشخصي للمدرب غير موجود');
         }
 
         // Update trainer profile verification status
@@ -150,7 +150,7 @@ export class AdminService {
             userId: trainerProfile.userId,
             type: 'ACCOUNT_REJECTED',
             title: 'تم رفض طلبك كمدرب',
-            message: `�†أسف �„رفض طلبك. السبب: ${reason}`,
+            message: `نأسف لرفض طلبك. السبب: ${reason}`,
             actionUrl: '/trainer/profile',
             emailFn: trainerProfile.user.email ? () => mailerService.sendAccountRejected(trainerProfile.user.email, trainerProfile.user.name, 'مدرب', reason) : undefined,
             whaFn: trainerProfile.user.phone ? () => whatsAppService.notifyAccountRejected(trainerProfile.user.phone!, trainerProfile.user.name, 'مدرب', reason) : undefined,
@@ -205,7 +205,7 @@ export class AdminService {
             userId: institute.userId,
             type: 'ACCOUNT_APPROVED',
             title: 'تم قبول المعهد',
-            message: `تهانينا! تمت مراجعة معهد "${institute.name}" �ˆا�„�…�ˆاف�‚ة عليه. يمكنكم الآن البدء ف�Š إنشاء الدورات.`,
+            message: `تهانينا! تمت مراجعة معهد "${institute.name}" والموافقة عليه. يمكنكم الآن البدء في إنشاء الدورات.`,
             actionUrl: '/institute/dashboard',
             emailFn: institute.user.email ? () => mailerService.sendAccountApproved(institute.user.email, institute.user.name, 'مسؤول معهد') : undefined,
             whaFn: institute.user.phone ? () => whatsAppService.notifyAccountApproved(institute.user.phone!, institute.user.name, 'مسؤول معهد') : undefined,
@@ -255,7 +255,7 @@ export class AdminService {
             userId: institute.userId,
             type: 'ACCOUNT_REJECTED',
             title: 'تم رفض طلب المعهد',
-            message: `�†أسف �„رفض طلب معهد "${institute.name}". السبب: ${reason}`,
+            message: `نأسف لرفض طلب معهد "${institute.name}". السبب: ${reason}`,
             actionUrl: '/institute/profile',
             emailFn: institute.user.email ? () => mailerService.sendAccountRejected(institute.user.email, institute.user.name, 'مسؤول معهد', reason) : undefined,
             whaFn: institute.user.phone ? () => whatsAppService.notifyAccountRejected(institute.user.phone!, institute.user.name, 'مسؤول معهد', reason) : undefined,

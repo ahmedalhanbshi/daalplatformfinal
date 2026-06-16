@@ -8,7 +8,7 @@ interface NotificationMessageProps {
 }
 
 function decodeMojibake(value: string) {
-  if (!/[ØÙÃ]/.test(value)) return value
+  if (!/[ÃØÙ]/.test(value)) return value
 
   try {
     const bytes = Uint8Array.from(Array.from(value), (char) => char.charCodeAt(0) & 0xff)
@@ -18,10 +18,23 @@ function decodeMojibake(value: string) {
   }
 }
 
+function repairKnownNotificationText(value: string) {
+  const instituteMatch = value.match(/تمت مراجعة معهد\s+"([^"]+)"/)
+  if (instituteMatch && value.includes("يمكنكم الآن") && value.includes("إنشاء الدورات")) {
+    return `تهانينا! تمت مراجعة معهد "${instituteMatch[1]}" والموافقة عليه. يمكنكم الآن البدء في إنشاء الدورات.`
+  }
+
+  if (value.includes("تمت مراجعة") && value.includes("الشخصي") && value.includes("إنشاء دوراتك")) {
+    return "تهانينا! تمت مراجعة ملفك الشخصي والموافقة عليه. يمكنك الآن البدء في إنشاء دوراتك."
+  }
+
+  return value
+}
+
 export function NotificationMessage({ message, isFull = false }: NotificationMessageProps) {
   if (!message) return null
 
-  const displayMessage = decodeMojibake(message)
+  const displayMessage = repairKnownNotificationText(decodeMojibake(message))
   const parts = displayMessage.split("---")
   const mainMessage = parts[0].trim()
   const metadataStr = parts.length > 1 ? parts[1].trim() : ""
