@@ -184,6 +184,8 @@ export default function RegisterPage() {
         if (cvFile) submitData.append("cv", cvFile)
         certificatesFiles.forEach((file) => submitData.append("certificates", file))
       } else if (data.role === "INSTITUTE_ADMIN") {
+        if (data.license) submitData.append("license", data.license)
+        if (data.address) submitData.append("address", data.address)
         if (licenseDocumentFile) submitData.append("licenseDocument", licenseDocumentFile)
       }
 

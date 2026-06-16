@@ -12,6 +12,8 @@ export const registerSchema = z.object({
             .regex(/[0-9]/, 'Password must contain at least one number'),
         phone: z.string().optional(),
         role: z.enum(['STUDENT', 'TRAINER', 'INSTITUTE_ADMIN']).optional(),
+        license: z.string().optional(),
+        address: z.string().optional(),
     }),
 });
 

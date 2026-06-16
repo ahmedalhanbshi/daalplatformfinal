@@ -26,7 +26,10 @@ import {
 export class AuthService {
     // Register new user
     async register(data: RegisterInput, files?: { cv?: Express.Multer.File[]; certificates?: Express.Multer.File[]; licenseDocument?: Express.Multer.File[] }) {
-        const { name, email, password, role, phone } = data;
+        const { name, email, password, role, phone, license, address } = data as RegisterInput & {
+            license?: string;
+            address?: string;
+        };
 
         // Check if user exists
         const existingUser = await prisma.user.findUnique({
@@ -82,6 +85,8 @@ export class AuthService {
                     name: name, // Use user name as institute name initially
                     email: email,
                     phone: phone,
+                    address: address?.trim() || null,
+                    licenseNumber: license?.trim() || null,
                     licenseDocumentUrl,
                     verificationStatus: 'PENDING',
                 },
