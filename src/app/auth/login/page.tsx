@@ -16,6 +16,20 @@ function sanitizeLoginErrorMessage(message?: string): string {
   const fallback = "حدث خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقًا"
   if (!message) return fallback
 
+  if (message.includes("قيد المراجعة") && (message.includes("�") || message.includes("Ø") || message.includes("Ù"))) {
+    if (message.includes("الجهة التدريبية")) {
+      return "الجهة التدريبية قيد المراجعة. يرجى الانتظار لموافقة الإدارة."
+    }
+    if (message.includes("كمدرب")) {
+      return "ملفك الشخصي كمدرب قيد المراجعة. يرجى الانتظار لموافقة الإدارة."
+    }
+    return "حسابك قيد المراجعة من قبل مدير المنصة. يرجى الانتظار للموافقة."
+  }
+
+  if (message.includes("تم تعليق حسابك") && (message.includes("�") || message.includes("Ø") || message.includes("Ù"))) {
+    return "تم تعليق حسابك. يرجى التواصل مع الدعم الفني."
+  }
+
   const lowered = message.toLowerCase()
   if (
     lowered.includes("prisma") ||

@@ -258,11 +258,11 @@ export class AuthService {
 
         // Check user status and verification for trainers/institutes
         if (user.status === 'PENDING_VERIFICATION') {
-            throw new Error('حسابك قيد المراجعة من قبل مدير المنصة. يرجى الانتظار �„�„�…�ˆاف�‚ة.');
+            throw new Error('حسابك قيد المراجعة من قبل مدير المنصة. يرجى الانتظار للموافقة.');
         }
 
         if (user.status === 'SUSPENDED') {
-            throw new Error('تم تعليق حسابك. يرجى التواصل مع الدعم ا�„ف�†�Š.');
+            throw new Error('تم تعليق حسابك. يرجى التواصل مع الدعم الفني.');
         }
 
         // Check trainer profile verification status
@@ -272,11 +272,11 @@ export class AuthService {
             });
 
             if (trainerProfile?.verificationStatus === 'PENDING') {
-                throw new Error('�…�„ف�ƒ الشخصي كمدرب قيد المراجعة. يرجى الانتظار �„�…�ˆاف�‚ة الإدارة.');
+                throw new Error('ملفك الشخصي كمدرب قيد المراجعة. يرجى الانتظار لموافقة الإدارة.');
             }
 
             if (trainerProfile?.verificationStatus === 'REJECTED') {
-                throw new Error(`تم رفض �…�„ف�ƒ الشخصي كمدرب. السبب: ${trainerProfile.rejectionReason || 'غير محدد'}`);
+                throw new Error(`تم رفض ملفك الشخصي كمدرب. السبب: ${trainerProfile.rejectionReason || 'غير محدد'}`);
             }
         }
 
@@ -287,7 +287,7 @@ export class AuthService {
             });
 
             if (institute?.verificationStatus === 'PENDING') {
-                throw new Error('الجهة التدريبية قيد المراجعة. يرجى الانتظار �„�…�ˆاف�‚ة الإدارة.');
+                throw new Error('الجهة التدريبية قيد المراجعة. يرجى الانتظار لموافقة الإدارة.');
             }
 
             if (institute?.verificationStatus === 'REJECTED') {
@@ -633,7 +633,7 @@ export class AuthService {
                 }
             });
             if (existingUser) {
-                throw new Error('البريد الإلكتروني موجود با�„فع�„');
+                throw new Error('البريد الإلكتروني موجود بالفعل');
             }
         }
 
