@@ -6,6 +6,10 @@ services:
     healthCheckPath: /health
     buildCommand: npm install && npm run prisma:generate && npm run build
     startCommand: npm run start
+    disk:
+      name: uploads
+      mountPath: /var/data/uploads
+      sizeGB: 10
     envVars:
       - key: PORT
         value: "5001"
@@ -54,4 +58,4 @@ services:
 
 # Fill the synced values from the Render Dashboard for each environment.
 # Do not place real secrets in this file.
-# For uploaded images, create a Render Persistent Disk mounted at /var/data.
+# Uploaded files are stored on the Render disk mounted at /var/data/uploads.
