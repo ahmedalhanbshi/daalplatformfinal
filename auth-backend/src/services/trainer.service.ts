@@ -797,7 +797,7 @@ class TrainerService {
                             await notificationService.createNotification({
                                 userId: student.id,
                                 type: 'SESSION_REMINDER' as any,
-                                title: `ðŸ—“️ تحديث الجدول الدراسي لدورة "${updated.title}"`,
+                                title: `🗓️ تحديث الجدول الدراسي لدورة "${updated.title}"`,
                                 message: `تم تحديث جدول دورة "${updated.title}" بالكامل (${count} جلسة).${reason ? ` السبب: ${reason}` : ''}`,
                                 relatedEntityId: courseId,
                                 actionUrl: '/student/courses',
@@ -2800,11 +2800,11 @@ class TrainerService {
                             userId: student.id,
                             type: (isCancel ? 'SESSION_CANCELLED' : 'SESSION_REMINDER') as any,
                             title: isCancel 
-                                ? `�Œ إلغاء جلسة ف�Š دورة "${courseTitle}"`
-                                : `📅 تعديل موعد جلسة ف�Š دورة "${courseTitle}"`,
+                                ? `❌ إلغاء جلسة في دورة "${courseTitle}"`
+                                : `📅 تعديل موعد جلسة في دورة "${courseTitle}"`,
                             message: isCancel 
-                                ? `تم إلغاء جلسة${session.topic ? ` "${session.topic}"` : ''} ف�Š دورة "${courseTitle}".${data.reason ? ` السبب: ${data.reason}` : ''}`
-                                : `تم تعديل موعد جلسة${session.topic ? ` "${session.topic}"` : ''} ف�Š دورة "${courseTitle}".${data.reason ? ` السبب: ${data.reason}` : ''}`,
+                                ? `تم إلغاء جلسة${session.topic ? ` "${session.topic}"` : ''} في دورة "${courseTitle}".${data.reason ? ` السبب: ${data.reason}` : ''}`
+                                : `تم تعديل موعد جلسة${session.topic ? ` "${session.topic}"` : ''} في دورة "${courseTitle}".${data.reason ? ` السبب: ${data.reason}` : ''}`,
                             relatedEntityId: session.courseId ?? undefined,
                             actionUrl: '/student/courses',
                             emailFn: student.email

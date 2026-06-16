@@ -48,7 +48,7 @@ class MailerService {
 <div class="container">
   <div class="header"><h1>🔔 ${title}</h1></div>
   <div class="body">${body}</div>
-  <div class="footer">منصة دال � جميع الحقوق محفوظة</div>
+  <div class="footer">منصة دال - جميع الحقوق محفوظة</div>
 </div>
 </body></html>`;
     }
@@ -87,17 +87,16 @@ class MailerService {
         }
     }
 
-    // ── Enrollment ─────────────────────────────────────────────────
     async sendEnrollmentPreliminaryAccepted(to: string, studentName: string, courseTitle: string) {
         await this.send({
             to,
-            subject: `✅ تم قبولك مبدئياً في دورة "${courseTitle}"`,
+            subject: `✅ تم قبولك مبدئيًا في دورة "${courseTitle}"`,
             html: this.wrapHtml('قبول مبدئي', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
                 <div class="card">
-                    <p>🎉 يسعدنا إخبارك بأنه تم قبولك مبدئياً في دورة <strong>${courseTitle}</strong>.</p>
+                    <p>🎉 يسعدنا إبلاغك بأنه تم قبولك مبدئيًا في دورة <strong>${courseTitle}</strong>.</p>
                 </div>
-                <p>الخطوة التالية هي إتمام عملية الدفع. يرجى الدخول إلى منصتنا وإرفاق سند الدفع لإكمال التسجيل.</p>
+                <p>الخطوة التالية هي إتمام عملية الدفع. يرجى الدخول إلى المنصة وإرفاق سند الدفع لاستكمال التسجيل.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/student/courses">إكمال التسجيل</a>
             `),
         });
@@ -106,11 +105,11 @@ class MailerService {
     async sendEnrollmentFinalAccepted(to: string, studentName: string, courseTitle: string) {
         await this.send({
             to,
-            subject: `🎓 تم قبولك نهائياً في دورة "${courseTitle}"`,
+            subject: `🎓 تم قبولك نهائيًا في دورة "${courseTitle}"`,
             html: this.wrapHtml('قبول نهائي', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
                 <div class="card">
-                    <p>🎉 تهانينا! تم تأكيد تسجيلك نهائياً في دورة <strong>${courseTitle}</strong>.</p>
+                    <p>🎉 تهانينا! تم تأكيد تسجيلك نهائيًا في دورة <strong>${courseTitle}</strong>.</p>
                 </div>
                 <p>يمكنك الآن الوصول إلى محتوى الدورة والجلسات التدريبية من لوحة التحكم الخاصة بك.</p>
                 <p>كما يمكنك <strong>تحميل شهادة تأكيد التسجيل</strong> بصيغة PDF من خلال زيارة قائمة الإشعارات في حسابك على المنصة.</p>
@@ -123,12 +122,12 @@ class MailerService {
         const title = isCancellation ? 'إلغاء التسجيل' : 'رفض التسجيل';
         const subjectAction = isCancellation ? 'تم إلغاء تسجيلك في' : 'تم رفض طلب تسجيلك في';
         const bodyAction = isCancellation ? 'بأنه تم إلغاء تسجيلك في دورة' : 'بأنه تم رفض طلب تسجيلك في دورة';
-        
+
         await this.send({
             to,
             subject: `❌ ${subjectAction} "${courseTitle}"`,
             html: this.wrapHtml(title, `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
                 <p>نأسف لإعلامك ${bodyAction} <strong>${courseTitle}</strong>.</p>
                 ${reason ? `<div class="card"><p><strong>السبب:</strong> ${reason}</p></div>` : ''}
                 <p>يمكنك التواصل مع الدعم إذا كان لديك أي استفسار، أو التقدم لدورات أخرى.</p>
@@ -142,7 +141,7 @@ class MailerService {
             to,
             subject: `💳 تم قبول دفعتك لدورة "${courseTitle}"`,
             html: this.wrapHtml('قبول الدفعة', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
                 <div class="card"><p>✅ تم التحقق من دفعتك لدورة <strong>${courseTitle}</strong> والموافقة عليها.</p></div>
                 <p>تسجيلك مكتمل الآن. نتمنى لك تجربة تعليمية رائعة!</p>
                 <p>كما يمكنك <strong>تحميل شهادة تأكيد التسجيل</strong> بصيغة PDF من خلال زيارة قائمة الإشعارات في حسابك على المنصة.</p>
@@ -156,7 +155,7 @@ class MailerService {
             to,
             subject: `⚠️ تم رفض دفعتك لدورة "${courseTitle}"`,
             html: this.wrapHtml('رفض الدفعة', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
                 <p>نأسف لإعلامك بأنه تم رفض سند الدفع المرفق لدورة <strong>${courseTitle}</strong>.</p>
                 ${reason ? `<div class="card"><p><strong>السبب:</strong> ${reason}</p></div>` : ''}
                 <p>يرجى إعادة رفع سند الدفع الصحيح من خلال لوحة التحكم.</p>
@@ -171,7 +170,7 @@ class MailerService {
             to,
             subject: `⏰ تذكير: جلسة "${sessionTopic}" تبدأ بعد ساعة`,
             html: this.wrapHtml('تذكير بالجلسة', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
                 <div class="card">
                     <p>🔔 تذكير: لديك جلسة تدريبية خلال ساعة!</p>
                     <p><strong>الدورة:</strong> ${courseTitle}</p>
@@ -183,13 +182,12 @@ class MailerService {
         });
     }
 
-    // ── Trainer ────────────────────────────────────────────────────
     async sendNewEnrollmentRequest(to: string, trainerName: string, studentName: string, courseTitle: string) {
         await this.send({
             to,
             subject: `📝 طلب تسجيل جديد في دورة "${courseTitle}"`,
             html: this.wrapHtml('طلب تسجيل جديد', `
-                <p>مرحباً <strong>${trainerName}</strong>،</p>
+                <p>مرحبًا <strong>${trainerName}</strong>،</p>
                 <div class="card"><p>👤 قدّم الطالب <strong>${studentName}</strong> طلب تسجيل في دورتك <strong>${courseTitle}</strong>.</p></div>
                 <p>يرجى مراجعة الطلب والرد عليه من لوحة التحكم.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/trainer/students">مراجعة الطلبات</a>
@@ -200,9 +198,9 @@ class MailerService {
     async sendPaymentReceiptSubmitted(to: string, recipientName: string, studentName: string, courseTitle: string) {
         await this.send({
             to,
-            subject: `💰 رُفع إيصال دفع لدورة "${courseTitle}"`,
+            subject: `💰 تم رفع إيصال دفع لدورة "${courseTitle}"`,
             html: this.wrapHtml('إيصال دفع جديد', `
-                <p>مرحباً <strong>${recipientName}</strong>،</p>
+                <p>مرحبًا <strong>${recipientName}</strong>،</p>
                 <div class="card"><p>📤 أرفق الطالب <strong>${studentName}</strong> إيصال دفع لدورة <strong>${courseTitle}</strong>.</p></div>
                 <p>يرجى المراجعة والتحقق من الإيصال في أقرب وقت.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/trainer/students">مراجعة الإيصال</a>
@@ -215,9 +213,9 @@ class MailerService {
             to,
             subject: `✅ تم قبول حسابك كـ${role}`,
             html: this.wrapHtml('قبول الحساب', `
-                <p>مرحباً <strong>${name}</strong>،</p>
+                <p>مرحبًا <strong>${name}</strong>،</p>
                 <div class="card"><p>🎉 يسعدنا إخبارك بأنه تم مراجعة حسابك والموافقة عليه كـ<strong>${role}</strong> في منصتنا.</p></div>
-                <p>يمكنك الآن تسجيل الدخول والبدء في استخدام جميع مميزات المنصة.</p>
+                <p>يمكنك الآن تسجيل الدخول والبدء في استخدام جميع ميزات المنصة.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth/login">تسجيل الدخول</a>
             `),
         });
@@ -228,7 +226,7 @@ class MailerService {
             to,
             subject: `❌ تم رفض طلب تسجيلك كـ${role}`,
             html: this.wrapHtml('رفض الحساب', `
-                <p>مرحباً <strong>${name}</strong>،</p>
+                <p>مرحبًا <strong>${name}</strong>،</p>
                 <p>نأسف لإعلامك بأنه تم رفض طلب تسجيلك كـ<strong>${role}</strong>.</p>
                 ${reason ? `<div class="card"><p><strong>السبب:</strong> ${reason}</p></div>` : ''}
                 <p>يمكنك التواصل مع الدعم لمزيد من التفاصيل.</p>
@@ -236,13 +234,12 @@ class MailerService {
         });
     }
 
-    // ── Admin ──────────────────────────────────────────────────────
     async sendNewTrainerApplication(to: string, adminName: string, trainerName: string) {
         await this.send({
             to,
             subject: `🆕 طلب تسجيل مدرب جديد: ${trainerName}`,
             html: this.wrapHtml('طلب تسجيل مدرب', `
-                <p>مرحباً <strong>${adminName}</strong>،</p>
+                <p>مرحبًا <strong>${adminName}</strong>،</p>
                 <div class="card"><p>👤 قام المدرب <strong>${trainerName}</strong> بإنشاء حساب جديد وهو بانتظار مراجعتك.</p></div>
                 <p>يرجى الدخول إلى لوحة التحكم لمراجعة الطلب واتخاذ القرار المناسب.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/verifications">مراجعة الطلبات</a>
@@ -255,7 +252,7 @@ class MailerService {
             to,
             subject: `🆕 طلب تسجيل معهد جديد: ${instituteName}`,
             html: this.wrapHtml('طلب تسجيل معهد', `
-                <p>مرحباً <strong>${adminName}</strong>،</p>
+                <p>مرحبًا <strong>${adminName}</strong>،</p>
                 <div class="card"><p>🏛️ قام المعهد <strong>${instituteName}</strong> بإنشاء حساب جديد وهو بانتظار مراجعتك.</p></div>
                 <p>يرجى الدخول إلى لوحة التحكم لمراجعة الطلب واتخاذ القرار المناسب.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/verifications">مراجعة الطلبات</a>
@@ -268,8 +265,8 @@ class MailerService {
             to,
             subject: `🏛️ طلب حجز قاعة جديد: "${roomName}"`,
             html: this.wrapHtml('طلب حجز جديد', `
-                <p>مرحباً <strong>${instituteName}</strong>،</p>
-                <div class="card"><p>👤 طلب المدرب <strong>${trainerName}</strong> حجز قاعة <strong>${roomName}</strong>.</p></div>
+                <p>مرحبًا <strong>${instituteName}</strong>،</p>
+                <div class="card"><p>👤 طلب المدرّب <strong>${trainerName}</strong> حجز قاعة <strong>${roomName}</strong>.</p></div>
                 <p>يرجى مراجعة الطلب والرد عليه من لوحة التحكم.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/institute/bookings">مراجعة الطلبات</a>
             `),
@@ -281,7 +278,7 @@ class MailerService {
             to,
             subject: `✅ تم قبول حجز القاعة "${roomName}"`,
             html: this.wrapHtml('قبول الحجز', `
-                <p>مرحباً <strong>${recipientName}</strong>،</p>
+                <p>مرحبًا <strong>${recipientName}</strong>،</p>
                 <div class="card"><p>🏛️ تمت المراجعة والموافقة على حجزك لقاعة <strong>${roomName}</strong>.</p></div>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/trainer/bookings">تفاصيل الحجز</a>
             `),
@@ -293,7 +290,7 @@ class MailerService {
             to,
             subject: `❌ تم رفض حجز القاعة "${roomName}"`,
             html: this.wrapHtml('رفض الحجز', `
-                <p>مرحباً <strong>${recipientName}</strong>،</p>
+                <p>مرحبًا <strong>${recipientName}</strong>،</p>
                 <p>نأسف لإعلامك بأنه تم رفض طلب حجز قاعة <strong>${roomName}</strong>.</p>
                 ${reason ? `<div class="card"><p><strong>السبب:</strong> ${reason}</p></div>` : ''}
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/trainer/halls">استعراض القاعات</a>
@@ -301,14 +298,13 @@ class MailerService {
         });
     }
 
-    // ── Auth ───────────────────────────────────────────────────────
     async sendPasswordResetCode(to: string, userName: string, code: string) {
         await this.send({
             to,
             subject: `🔐 رمز إعادة تعيين كلمة المرور الخاص بك`,
             html: this.wrapHtml('إعادة تعيين كلمة المرور', `
-                <p>مرحباً <strong>${userName}</strong>،</p>
-                <p>لقد تلقينا طلباً لإعادة تعيين كلمة المرور لحسابك. استخدم رمز التحقق التالي:</p>
+                <p>مرحبًا <strong>${userName}</strong>،</p>
+                <p>لقد تلقينا طلبًا لإعادة تعيين كلمة المرور لحسابك. استخدم رمز التحقق التالي:</p>
                 <div class="card" style="text-align: center;">
                     <h2 style="font-size: 32px; letter-spacing: 4px; color: #4f46e5; margin: 0;">${code}</h2>
                 </div>
@@ -319,7 +315,7 @@ class MailerService {
 
     async sendAnnouncementEmail(to: string, userName: string, title: string, message: string, senderInfo?: { name: string; phone?: string | null; email?: string | null; instituteName?: string }) {
         let body = `
-            <p>مرحباً <strong>${userName}</strong>،</p>
+            <p>مرحبًا <strong>${userName}</strong>،</p>
             <div class="card">
                 <p>${message.replace(/\n/g, '<br/>')}</p>
             </div>
@@ -350,11 +346,6 @@ class MailerService {
         });
     }
 
-    // ── Minimum Enrollment Threshold ───────────────────────────────
-
-    /**
-     * Notify course owner that minimum student count has been reached
-     */
     async sendMinimumReachedEmail(
         to: string,
         ownerName: string,
@@ -366,7 +357,7 @@ class MailerService {
             to,
             subject: `🎉 اكتمل الحد الأدنى في دورة "${courseTitle}"`,
             html: this.wrapHtml('اكتمال الحد الأدنى', `
-                <p>مرحباً <strong>${ownerName}</strong>،</p>
+                <p>مرحبًا <strong>${ownerName}</strong>،</p>
                 <div class="card">
                     <p>🎉 تهانينا! وصل عدد المسجلين المبدئيين في دورة <strong>${courseTitle}</strong> إلى الحد الأدنى المطلوب وهو <strong>${minStudents} طالب</strong>.</p>
                 </div>
@@ -375,15 +366,12 @@ class MailerService {
                     <li>إضافة القاعة والجلسات إذا كانت الدورة حضورية</li>
                     <li>إضافة رابط الاجتماع والجلسات إذا كانت الدورة أونلاين</li>
                 </ul>
-                <p>بمجرد حفظ الإعداد وتفعيل الدورة، سيُشعَر جميع الطلاب المسجلين تلقائياً بإكمال عملية الدفع.</p>
+                <p>بمجرد حفظ الإعداد وتفعيل الدورة، سيُشعَر جميع الطلاب المسجلين تلقائيًا بإكمال عملية الدفع.</p>
                 <a class="btn" href="${setupUrl}">إكمال إعداد الدورة</a>
             `),
         });
     }
 
-    /**
-     * Notify enrolled students that the course is fully set up and payment is now required
-     */
     async sendCourseReadyForPaymentEmail(
         to: string,
         studentName: string,
@@ -394,7 +382,7 @@ class MailerService {
             to,
             subject: `🎓 الدورة جاهزة! أكمل تسجيلك في "${courseTitle}"`,
             html: this.wrapHtml('الدورة جاهزة للتسجيل', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
                 <div class="card">
                     <p>🎉 تم الانتهاء من إعداد دورة <strong>${courseTitle}</strong> وأصبحت جاهزة للانطلاق!</p>
                 </div>
@@ -404,9 +392,6 @@ class MailerService {
         });
     }
 
-    /**
-     * Notify student their preliminary enrollment was accepted but course is still awaiting minimum
-     */
     async sendPreliminaryAcceptedWaitingEmail(
         to: string,
         studentName: string,
@@ -416,24 +401,19 @@ class MailerService {
     ) {
         await this.send({
             to,
-            subject: `✅ تم قبولك مبدئياً في دورة "${courseTitle}"`,
-            html: this.wrapHtml('قبول مبدئي � انتظار اكتمال العدد', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
+            subject: `✅ تم قبولك مبدئيًا في دورة "${courseTitle}"`,
+            html: this.wrapHtml('قبول مبدئي - انتظار اكتمال العدد', `
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
                 <div class="card">
                     <p>✅ يسعدنا إخبارك بقبول تسجيلك المبدئي في دورة <strong>${courseTitle}</strong>.</p>
                 </div>
-                <p>الدورة حالياً بانتظار اكتمال الحد الأدنى المطلوب من الطلاب وهو <strong>${minStudents} طالب</strong>.</p>
+                <p>الدورة حاليًا بانتظار اكتمال الحد الأدنى المطلوب من الطلاب وهو <strong>${minStudents} طالب</strong>.</p>
                 <p>سيتم إشعارك فور اكتمال العدد وجاهزية الدورة لإكمال عملية الدفع.</p>
                 <a class="btn" href="${courseUrl}">عرض تفاصيل الدورة</a>
             `),
         });
     }
 
-    // ── Session Change Notifications ───────────────────────────────
-
-    /**
-     * Notify a student that a single session has been rescheduled/updated
-     */
     async sendSessionUpdated(
         to: string,
         studentName: string,
@@ -442,33 +422,30 @@ class MailerService {
         reason?: string,
     ) {
         const fmt = (d?: Date) =>
-            d ? d.toLocaleString('ar-SA-u-nu-latn', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '�';
+            d ? d.toLocaleString('ar-SA-u-nu-latn', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'غير محدد';
 
-        const oldTime = `${fmt(changes.oldStart)} � ${fmt(changes.oldEnd)}`;
-        const newTime = `${fmt(changes.newStart)} � ${fmt(changes.newEnd)}`;
+        const oldTime = `${fmt(changes.oldStart)} إلى ${fmt(changes.oldEnd)}`;
+        const newTime = `${fmt(changes.newStart)} إلى ${fmt(changes.newEnd)}`;
         const topicLine = changes.topic ? `<p><strong>موضوع الجلسة:</strong> ${changes.topic}</p>` : '';
 
         await this.send({
             to,
             subject: `📅 تعديل موعد جلسة في دورة "${courseTitle}"`,
             html: this.wrapHtml('تعديل موعد جلسة', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
-                <p>نودّ إعلامك بأنه تم تعديل موعد إحدى جلسات دورة <strong>${courseTitle}</strong>.</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
+                <p>نود إعلامك بأنه تم تعديل موعد إحدى جلسات دورة <strong>${courseTitle}</strong>.</p>
                 ${topicLine}
                 <div class="card">
                     <p>⏱️ <strong>الموعد القديم:</strong><br/>${oldTime}</p>
                     <p>🆕 <strong>الموعد الجديد:</strong><br/>${newTime}</p>
                     ${reason ? `<p>📝 <strong>سبب التعديل:</strong> ${reason}</p>` : ''}
                 </div>
-                <p>يرجى تحديث جدولك الشخصي وفقاً للموعد الجديد.</p>
+                <p>يرجى تحديث جدولك الشخصي وفقًا للموعد الجديد.</p>
                 <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/student/courses">عرض جدول الدورة</a>
             `),
         });
     }
 
-    /**
-     * Notify a student that a session has been cancelled
-     */
     async sendSessionCancelled(
         to: string,
         studentName: string,
@@ -482,19 +459,16 @@ class MailerService {
             to,
             subject: `❌ إلغاء جلسة في دورة "${courseTitle}"`,
             html: this.wrapHtml('إلغاء جلسة', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
-                <p>نودّ إعلامك بأنه تم إلغاء إحدى جلسات دورة <strong>${courseTitle}</strong>.</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
+                <p>نأسف لإعلامك بأنه تم إلغاء إحدى جلسات دورة <strong>${courseTitle}</strong>.</p>
                 ${topicLine}
-                ${reason ? `<div class="card"><p>📝 <strong>سبب الإلغاء:</strong> ${reason}</p></div>` : ''}
-                <p>يرجى تحديث جدولك الشخصي.</p>
-                <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/student/courses">عرض جدول الدورة</a>
+                ${reason ? `<div class="card"><p><strong>السبب:</strong> ${reason}</p></div>` : ''}
+                <p>يرجى مراجعة المنصة لأي تحديثات إضافية.</p>
+                <a class="btn" href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/student/courses">عرض الدورة</a>
             `),
         });
     }
 
-    /**
-     * Notify a student that the entire course schedule has been replaced
-     */
     async sendSessionsRescheduled(
         to: string,
         studentName: string,
@@ -506,8 +480,8 @@ class MailerService {
             to,
             subject: `🗓️ تحديث جدول دورة "${courseTitle}"`,
             html: this.wrapHtml('تحديث الجدول الدراسي', `
-                <p>مرحباً <strong>${studentName}</strong>،</p>
-                <p>نودّ إعلامك بأنه تم تحديث الجدول الدراسي الكامل لدورة <strong>${courseTitle}</strong>.</p>
+                <p>مرحبًا <strong>${studentName}</strong>،</p>
+                <p>نود إعلامك بأنه تم تحديث الجدول الدراسي الكامل لدورة <strong>${courseTitle}</strong>.</p>
                 <div class="card">
                     <p>📚 <strong>عدد الجلسات الجديدة:</strong> ${sessionsCount} جلسة</p>
                     ${reason ? `<p>📝 <strong>سبب التعديل:</strong> ${reason}</p>` : ''}

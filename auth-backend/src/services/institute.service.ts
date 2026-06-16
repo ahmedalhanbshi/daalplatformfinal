@@ -566,7 +566,7 @@ class InstituteService {
 
         const instituteAdmin = institute.user;
 
-        const contactFooter = `\n\n---\nðŸ›️ المعهد: ${institute.name}`;
+        const contactFooter = `\n\n---\n🏛️ المعهد: ${institute.name}`;
         const fullMessage = data.message + contactFooter;
 
         // Fetch ALL course IDs for this institute
@@ -2384,7 +2384,7 @@ class InstituteService {
                             await notificationService.createNotification({
                                 userId: student.id,
                                 type: 'SESSION_REMINDER' as any,
-                                title: `ðŸ—“️ تحديث الجدول الدراسي لدورة "${updatedCourse.title}"`,
+                                title: `🗓️ تحديث الجدول الدراسي لدورة "${updatedCourse.title}"`,
                                 message: `تم تحديث جدول دورة "${updatedCourse.title}" بالكامل (${count} جلسة).${reason ? ` السبب: ${reason}` : ''}`,
                                 relatedEntityId: courseId,
                                 actionUrl: '/student/courses',
@@ -2997,8 +2997,8 @@ class InstituteService {
                         await notificationService.createNotification({
                             userId: student.id,
                             type: 'SESSION_REMINDER' as any,
-                            title: `📅 تعديل موعد جلسة ف�Š دورة "${courseTitle}"`,
-                            message: `تم تعديل موعد جلسة${session.topic ? ` "${session.topic}"` : ''} ف�Š دورة "${courseTitle}".${data.reason ? ` السبب: ${data.reason}` : ''}`,
+                            title: `📅 تعديل موعد جلسة في دورة "${courseTitle}"`,
+                            message: `تم تعديل موعد جلسة${session.topic ? ` "${session.topic}"` : ''} في دورة "${courseTitle}".${data.reason ? ` السبب: ${data.reason}` : ''}`,
                             relatedEntityId: session.courseId ?? undefined,
                             actionUrl: '/student/courses',
                             emailFn: student.email

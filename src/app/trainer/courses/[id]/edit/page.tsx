@@ -158,9 +158,9 @@ export default function EditCoursePage() {
             setCourseData(prev => ({ ...prev, categoryId: newCat.id }))
             setNewCategoryInput("")
             setIsAddingCategory(false)
-            toast.success(`تم إضافة ا�„تص�†�Šف "${newCat.name}" بنجاح`)
+            toast.success(`تم إضافة التصنيف "${newCat.name}" بنجاح`)
         } catch (err: any) {
-            toast.error(err?.response?.data?.message || "فش�„ ف�Š إضافة ا�„تص�†�Šف")
+            toast.error(err?.response?.data?.message || "فش في إضافة التصنيف")
         } finally {
             setIsCreatingCategory(false)
         }
@@ -182,7 +182,7 @@ export default function EditCoursePage() {
             setNewTagInput("")
             toast.success(`تم إضافة الوسم "${newTag.name}" بنجاح`)
         } catch (err: any) {
-            toast.error(err?.response?.data?.message || "فش�„ ف�Š إضافة الوسم")
+            toast.error(err?.response?.data?.message || "فش في إضافة الوسم")
         } finally {
             setIsCreatingTag(false)
         }
@@ -290,7 +290,7 @@ export default function EditCoursePage() {
                     }
                 }
             } catch (err: any) {
-                toast.error(err?.response?.data?.message || "فش�„ ف�Š تحميل بيانات الدورة")
+                toast.error(err?.response?.data?.message || "فش في تحميل بيانات الدورة")
                 router.push("/trainer/courses")
             } finally {
                 setLoading(false)
@@ -309,7 +309,7 @@ export default function EditCoursePage() {
         hourlyRate: Number(h.pricePerHour),
         image: h.image || "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1000",
         features: h.facilities && h.facilities.length > 0 ? h.facilities : ["مجهزة بالكامل"],
-        description: h.description || `${h.facilities?.join(' � ') || 'لا يوجد �ˆصف'}`,
+        description: h.description || `${h.facilities?.join(' • ') || 'لا يوجد وصف'}`,
         owner: h.institute?.name || "المعهد",
         bankAccounts: h.institute?.bankAccounts || []
     }))
@@ -433,9 +433,9 @@ export default function EditCoursePage() {
             })
 
             setAvailableSlots(openSlots)
-            if (openSlots.length === 0) setUnavailableMessage("لا يوجد أوقات متاحة ف�Š هذا اليوم أو القاعة مغلقة")
+            if (openSlots.length === 0) setUnavailableMessage("لا يوجد أوقات متاحة في هذا اليوم أو القاعة مغلقة")
         } catch (e: any) {
-            toast.error("فش�„ جلب أوقات القاعة المتاحة")
+            toast.error("فش جلب أوقات القاعة المتاحة")
         } finally {
             setIsSlotsLoading(false)
         }
@@ -508,14 +508,14 @@ export default function EditCoursePage() {
             let sessionsPayload: any[] = [];
 
             if (status === 'DRAFT' || status === 'PENDING_MINIMUM') {
-                // المسودة ودورات انتظار اكتمال العدد لا تحتاج مواعيد � ترسل فارغة
+                // المسودة ودورات انتظار اكتمال العدد لا تحتاج مواعيد، ترسل فارغة
                 startDate = '';
                 endDate = '';
                 sessionsPayload = [];
             } else if (courseData.deliveryType === 'in_person') {
                 if (status === 'ACTIVE') {
                     if (selectedSessions.length === 0) throw new Error("يجب اختيار جلسة واحدة على الأقل");
-                    if (!paymentFile) throw new Error("يجب إرفا�‚ سند ا�„دفع لحجز القاعة");
+                    if (!paymentFile) throw new Error("يجب إرفاق سند الدفع لحجز القاعة");
                 }
 
                 if (selectedSessions.length === 0) {
@@ -559,7 +559,7 @@ export default function EditCoursePage() {
                     };
                 });
             } else {
-                // flexible أو غير محدد � لا تواريخ
+                // flexible أو غير محدد: لا تواريخ
                 startDate = '';
                 endDate = '';
             }
@@ -600,7 +600,7 @@ export default function EditCoursePage() {
 
             toast.success(
                 status === 'DRAFT' ? 'تم حفظ المسودة بنجاح' :
-                    status === 'PENDING_MINIMUM' ? 'تم نشر الدورة! ستُفع�‘�„ عند اكتمال الحد الأدنى وإكمال الإعداد' :
+                    status === 'PENDING_MINIMUM' ? 'تم نشر الدورة! ستُفعع عند اكتمال الحد الأدنى وإكمال الإعداد' :
                         'تم تحديث الدورة بنجاح'
             );
             router.push('/trainer/courses');
@@ -645,7 +645,7 @@ export default function EditCoursePage() {
 
     /**
      * نشر وإعلام الطلاب (pending_min_ready → ACTIVE)
-     * 1. �Šحفظ الجلسات ا�„�…ضافة أولاً
+     * 1. يحفظ الجلسات المضافة أولاً
      * 2. يستدعي /activate لتحويل الطلاب وإرسال الإشعارات
      */
     const handleActivateCourse = async () => {
@@ -667,12 +667,12 @@ export default function EditCoursePage() {
                     return
                 }
                 if (!paymentFile) {
-                    toast.error('يجب إرفا�‚ سند ا�„دفع لحجز القاعة')
+                    toast.error('يجب إرفاق سند الدفع لحجز القاعة')
                     setIsSubmitting(false)
                     return
                 }
             } else if (!courseData.deliveryType) {
-                toast.error('يجب اختيار نوع ا�„ت�†ف�Šذ أولاً')
+                toast.error('يجب اختيار نوع التنفيذ أولاً')
                 setIsSubmitting(false)
                 return
             }
@@ -680,14 +680,14 @@ export default function EditCoursePage() {
             // حفظ الجلسات عبر PUT (بدون تغيير status)
             await handleSubmit('PENDING_MINIMUM')
 
-            // تفع�Š�„ الدورة وإشعار الطلاب
+            // تفعي الدورة وإشعار الطلاب
             await trainerService.activateCourse(courseId)
 
             toast.success('🎉 تم نشر الدورة وإعلام الطلاب بنجاح!')
             router.push('/trainer/courses')
         } catch (err: any) {
             const backendMessage = err?.response?.data?.message
-            toast.error(backendMessage || err?.message || 'حدث خطأ أثناء تفع�Š�„ الدورة')
+            toast.error(backendMessage || err?.message || 'حدث خطأ أثناء تفعي الدورة')
         } finally {
             setIsSubmitting(false)
         }
@@ -700,7 +700,7 @@ export default function EditCoursePage() {
             toast.success("تم حذف الدورة بنجاح")
             router.push("/trainer/courses")
         } catch (err: any) {
-            toast.error(err?.response?.data?.message || "فش�„ حذف الدورة")
+            toast.error(err?.response?.data?.message || "فش حذف الدورة")
         } finally {
             setIsSubmitting(false)
             setShowDeleteDialog(false)
@@ -729,9 +729,9 @@ export default function EditCoursePage() {
     const shortDescriptionCount = courseData.shortDescription.length
     const descriptionMax = 1000
     const descriptionCount = courseData.description.length
-    const selectedCategoryName = categories.find((c) => c.id === courseData.categoryId)?.name || "ا�„فئة"
+    const selectedCategoryName = categories.find((c) => c.id === courseData.categoryId)?.name || "الفئة"
     const previewTitle = courseData.title.trim() || "عنوان الدورة سيظهر هنا"
-    const previewShortDesc = courseData.shortDescription.trim() || "�ˆصف الدورة المختصر سيظهر هنا"
+    const previewShortDesc = courseData.shortDescription.trim() || "وصف الدورة المختصر سيظهر هنا"
 
     // --- Permissions (computed from course status) ---
     const permissions = getCourseEditPermissions(courseStatus, enrolledCount, minStudentsCount)
@@ -752,7 +752,7 @@ export default function EditCoursePage() {
                     <Button variant="outline" size="sm" asChild>
                         <Link href={`/trainer/courses/${courseId}`}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            العودة إلى ا�„تفاص�Š�„
+                            العودة إلى التفاصيل
                         </Link>
                     </Button>
                     <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
@@ -764,7 +764,7 @@ export default function EditCoursePage() {
                         </DialogTrigger>
                         <DialogContent dir="rtl">
                             <DialogHeader className="text-right">
-                                <DialogTitle>تأكيد ا�„حذف</DialogTitle>
+                                <DialogTitle>تأكيد الحذف</DialogTitle>
                                 <DialogDescription>هل أنت متأكد من حذف هذه الدورة؟ لا يمكن التراجع بعد هذه الخطوة.</DialogDescription>
                             </DialogHeader>
                             <DialogFooter className="flex-row-reverse gap-2 sm:justify-start">
@@ -801,7 +801,7 @@ export default function EditCoursePage() {
                                 <span className={`mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors ${activeTab === "info" ? "bg-blue-600 text-white" : "bg-slate-200 text-slate-600"}`}>1</span>
                                 <span>
                                     <span className={`block text-base font-bold ${activeTab === "info" ? "text-slate-900" : "text-slate-500"}`}>بيانات الدورة</span>
-                                    <span className="block text-sm text-slate-500">المعلومات الأساسية �ˆا�„تفاص�Š�„</span>
+                                    <span className="block text-sm text-slate-500">المعلومات الأساسية والتفاصيل</span>
                                 </span>
                             </button>
 
@@ -855,7 +855,7 @@ export default function EditCoursePage() {
                                                 {showInfoErrors && !courseData.title.trim() && <p className="text-xs text-red-500 text-right mt-1">يرجى إدخال عنوان الدورة.</p>}
                                             </div>
                                             <div className="space-y-2.5 pr-2 sm:pr-3 lg:pr-4">
-                                                <Label className="font-semibold">ا�„فئة <span className="text-red-500">*</span></Label>
+                                                <Label className="font-semibold">الفئة <span className="text-red-500">*</span></Label>
                                                 <Select
                                                     disabled={isFieldLocked('categoryId')}
                                                     value={courseData.categoryId}
@@ -867,24 +867,24 @@ export default function EditCoursePage() {
                                                         }
                                                     }}
                                                 >
-                                                    <SelectTrigger><SelectValue placeholder="اختر ا�„فئة" /></SelectTrigger>
+                                                    <SelectTrigger><SelectValue placeholder="اختر الفئة" /></SelectTrigger>
                                                     <SelectContent>
                                                         {categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                                                        <SelectItem value="__add_new__" className="text-blue-600 font-medium border-t mt-1">+ إضافة تص�†�Šف جديد</SelectItem>
+                                                        <SelectItem value="__add_new__" className="text-blue-600 font-medium border-t mt-1">+ إضافة تصنيف جديد</SelectItem>
                                                     </SelectContent>
                                                 </Select>
-                                                {showInfoErrors && !courseData.categoryId && <p className="text-xs text-red-500 text-right">يرجى اختيار ا�„فئة.</p>}
+                                                {showInfoErrors && !courseData.categoryId && <p className="text-xs text-red-500 text-right">يرجى اختيار الفئة.</p>}
                                                 {isAddingCategory && (
                                                     <div className="mt-1 flex items-center gap-2">
-                                                        <Input value={newCategoryInput} onChange={e => setNewCategoryInput(e.target.value)} placeholder="اسم ا�„تص�†�Šف الجديد..." className="h-8 text-sm" onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddCategory(); } }} autoFocus />
+                                                        <Input value={newCategoryInput} onChange={e => setNewCategoryInput(e.target.value)} placeholder="اسم التصنيف الجديد..." className="h-8 text-sm" onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddCategory(); } }} autoFocus />
                                                         <Button type="button" size="sm" onClick={handleAddCategory} disabled={isCreatingCategory}>{isCreatingCategory ? <Loader2 className="h-3 w-3 animate-spin" /> : 'إضافة'}</Button>
                                                         <Button type="button" size="sm" variant="ghost" onClick={() => { setIsAddingCategory(false); setNewCategoryInput(''); }}>إلغاء</Button>
                                                     </div>
                                                 )}
                                             </div>
                                             <div className="space-y-2.5 pr-2 sm:pr-3 lg:pr-4">
-                                                <Label className="font-semibold">�ˆصف مختصر <span className="text-red-500">*</span></Label>
-                                                <Textarea value={courseData.shortDescription} onChange={e => setCourseData({ ...courseData, shortDescription: e.target.value.slice(0, shortDescriptionMax) })} rows={2} placeholder="اكتب �ˆصف�‹ا مختصرًا عن الدورة يظهر ف�Š بطاقة الدورة" />
+                                                <Label className="font-semibold">وصف مختصر <span className="text-red-500">*</span></Label>
+                                                <Textarea value={courseData.shortDescription} onChange={e => setCourseData({ ...courseData, shortDescription: e.target.value.slice(0, shortDescriptionMax) })} rows={2} placeholder="اكتب وصفًا مختصرًا عن الدورة يظهر في بطاقة الدورة" />
                                                 <div className="flex items-center justify-between text-xs text-gray-500">
                                                     <span>{shortDescriptionCount}/{shortDescriptionMax}</span>
                                                 </div>
@@ -899,7 +899,7 @@ export default function EditCoursePage() {
                                                         <div className="flex h-full flex-col items-center justify-center text-gray-400 text-center px-3">
                                                             <Plus className="mb-2 h-8 w-8" />
                                                             <span className="text-xs">ارفع صورة الدورة</span>
-                                                            <span className="mt-1 text-[11px] text-gray-400">�Šفض�„ مقاس 1280�720 بصيغة JPG أو PNG.</span>
+                                                            <span className="mt-1 text-[11px] text-gray-400">يفضل مقاس 1280×720 بصيغة JPG أو PNG.</span>
                                                         </div>
                                                     )}
                                                 </div>
@@ -915,12 +915,12 @@ export default function EditCoursePage() {
                                     </div>
 
                                     <div className="space-y-2 pr-2 sm:pr-3 lg:pr-4">
-                                        <Label>ا�„�ˆصف ا�„تفص�Š�„�Š <span className="text-red-500">*</span></Label>
-                                        <Textarea value={courseData.description} onChange={e => setCourseData({ ...courseData, description: e.target.value.slice(0, descriptionMax) })} rows={4} placeholder="اكتب �ˆصف�‹ا تفص�Š�„�Š�‹ا عمّا سيتعلمه الطالب." />
+                                        <Label>الوصف التفصيلي <span className="text-red-500">*</span></Label>
+                                        <Textarea value={courseData.description} onChange={e => setCourseData({ ...courseData, description: e.target.value.slice(0, descriptionMax) })} rows={4} placeholder="اكتب وصفًا تفصيليًا عمّا سيتعلمه الطالب." />
                                         <div className="flex items-center justify-between text-xs text-gray-500">
                                             <span>{descriptionCount}/{descriptionMax}</span>
                                         </div>
-                                        {showInfoErrors && !courseData.description && <p className="text-xs text-red-500">ا�„�ˆصف ا�„تفص�Š�„�Š مطلوب.</p>}
+                                        {showInfoErrors && !courseData.description && <p className="text-xs text-red-500">الوصف التفصيلي مطلوب.</p>}
                                     </div>
                                 </CardContent>
                             </Card>
@@ -928,7 +928,7 @@ export default function EditCoursePage() {
                             <div className="space-y-4 xl:hidden">
                                 <div className="space-y-2">
                                     <h3 className="text-base font-bold text-slate-900">معاينة الدورة</h3>
-                                    <p className="text-xs text-slate-500">هذا الشكل التقريبي لظهور الدورة ف�Š صفحة الاستعراض.</p>
+                                    <p className="text-xs text-slate-500">هذا الشكل التقريبي لظهور الدورة في صفحة الاستعراض.</p>
                                 </div>
                                 <article className="group flex flex-col overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-[0_10px_24px_rgba(15,23,42,0.06)]">
                                     <div className="relative h-[188px] overflow-hidden bg-slate-100 md:h-[196px]">
@@ -939,7 +939,7 @@ export default function EditCoursePage() {
                                         )}
                                         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900/25 via-slate-900/10 to-transparent" />
                                         <span className="absolute bottom-3 right-3 rounded-full bg-white/86 px-2.5 py-1 text-[11px] font-semibold text-slate-700 backdrop-blur-[2px]">
-                                            {selectedCategoryName || "ا�„فئة"}
+                                            {selectedCategoryName || "الفئة"}
                                         </span>
                                     </div>
 
@@ -973,7 +973,7 @@ export default function EditCoursePage() {
                                                     <button
                                                         type="button"
                                                         className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-red-500 shadow-sm transition-colors hover:bg-slate-50"
-                                                        aria-label="إضافة �„�„�…فض�„ة"
+                                                    aria-label="إضافة للمفضلة"
                                                     >
                                                         <Heart className="h-4 w-4" />
                                                     </button>
@@ -990,9 +990,9 @@ export default function EditCoursePage() {
                                     <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-base"><Lightbulb className="h-4 w-4 text-amber-500" />نصائح لدورة ناجحة</CardTitle></CardHeader>
                                     <CardContent className="space-y-2 text-sm text-gray-700">
                                         <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>اجعل العنوان واضحًا ومباشرًا.</span></p>
-                                        <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>استخدم صورة جذابة �ˆاحتراف�Šة.</span></p>
-                                        <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>اكتب �ˆصف�‹ا يوضح فائدة الدورة للطالب.</span></p>
-                                        <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>أضف أ�‡داف�‹ا تعليمية قابلة للقياس.</span></p>
+                                        <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>استخدم صورة جذابة واحترافية.</span></p>
+                                        <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>اكتب وصفًا يوضح فائدة الدورة للطالب.</span></p>
+                                        <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>أضف أهدافًا تعليمية قابلة للقياس.</span></p>
                                     </CardContent>
                                 </Card>
 
@@ -1049,11 +1049,11 @@ export default function EditCoursePage() {
 
                             <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                                 <Card className="border border-gray-200 shadow-sm">
-                                    <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-base"><Target className="h-4 w-4 text-blue-600" />ا�„أ�‡داف</CardTitle></CardHeader>
+                                    <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-base"><Target className="h-4 w-4 text-blue-600" />الأهداف</CardTitle></CardHeader>
                                     <CardContent className="space-y-3">
-                                        <div className="flex gap-2"><Input value={currentObjective} onChange={e => setCurrentObjective(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addObjective(); } }} placeholder="أضف �‡دف�‹ا..." /><Button onClick={addObjective} size="icon"><Plus className="h-4 w-4" /></Button></div>
+                                        <div className="flex gap-2"><Input value={currentObjective} onChange={e => setCurrentObjective(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addObjective(); } }} placeholder="أضف هدفًا..." /><Button onClick={addObjective} size="icon"><Plus className="h-4 w-4" /></Button></div>
                                         <div className={`space-y-2 ${courseData.objectives.length === 0 ? "min-h-[44px]" : "min-h-[120px]"}`}>
-                                            {courseData.objectives.length === 0 ? <p className="text-xs text-gray-400">لا توجد أ�‡داف �…ضافة بعد.</p> : courseData.objectives.map((o, i) => <div key={i} className="flex items-center justify-between rounded-md bg-gray-50 p-2 text-sm"><span>{o}</span><X className="h-4 w-4 cursor-pointer text-red-500" onClick={() => removeObjective(i)} /></div>)}
+                                            {courseData.objectives.length === 0 ? <p className="text-xs text-gray-400">لا توجد أهداف مضافة بعد.</p> : courseData.objectives.map((o, i) => <div key={i} className="flex items-center justify-between rounded-md bg-gray-50 p-2 text-sm"><span>{o}</span><X className="h-4 w-4 cursor-pointer text-red-500" onClick={() => removeObjective(i)} /></div>)}
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -1063,13 +1063,13 @@ export default function EditCoursePage() {
                                     <CardContent className="space-y-3">
                                         <div className="flex gap-2"><Input value={currentPrerequisite} onChange={e => setCurrentPrerequisite(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addPrerequisite(); } }} placeholder="أضف متطلبًا..." /><Button onClick={addPrerequisite} size="icon"><Plus className="h-4 w-4" /></Button></div>
                                         <div className={`space-y-2 ${courseData.prerequisites.length === 0 ? "min-h-[44px]" : "min-h-[120px]"}`}>
-                                            {courseData.prerequisites.length === 0 ? <p className="text-xs text-gray-400">لا توجد متطلبات �…ضافة بعد.</p> : courseData.prerequisites.map((p, i) => <div key={i} className="flex items-center justify-between rounded-md bg-gray-50 p-2 text-sm"><span>{p}</span><X className="h-4 w-4 cursor-pointer text-red-500" onClick={() => removePrerequisite(i)} /></div>)}
+                                            {courseData.prerequisites.length === 0 ? <p className="text-xs text-gray-400">لا توجد متطلبات مضافة بعد.</p> : courseData.prerequisites.map((p, i) => <div key={i} className="flex items-center justify-between rounded-md bg-gray-50 p-2 text-sm"><span>{p}</span><X className="h-4 w-4 cursor-pointer text-red-500" onClick={() => removePrerequisite(i)} /></div>)}
                                         </div>
                                     </CardContent>
                                 </Card>
 
                                 <Card className="border border-gray-200 shadow-sm">
-                                    <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-base"><Tags className="h-4 w-4 text-blue-600" />الوسوم</CardTitle><p className="mt-1 text-xs text-gray-500">اختر الوسوم المناسبة �„تص�†�Šف الدورة</p></CardHeader>
+                                    <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-base"><Tags className="h-4 w-4 text-blue-600" />الوسوم</CardTitle><p className="mt-1 text-xs text-gray-500">اختر الوسوم المناسبة تصنيف الدورة</p></CardHeader>
                                     <CardContent className="space-y-3">
                                         <div className="flex flex-wrap gap-1.5">
                                             {availableTags.map(tag => {
@@ -1079,7 +1079,7 @@ export default function EditCoursePage() {
                                         </div>
                                         <div className="mt-2 flex gap-2 border-t pt-2">
                                             <Input placeholder="أضف وسمًا جديدًا..." value={newTagInput} onChange={e => setNewTagInput(e.target.value)} className="h-8 text-sm" onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddTag(); } }} />
-                                            <Button type="button" onClick={handleAddTag} size="sm" variant="secondary" disabled={isCreatingTag || !newTagInput.trim()}>{isCreatingTag ? "�Šضاف..." : "إضافة"}</Button>
+                                            <Button type="button" onClick={handleAddTag} size="sm" variant="secondary" disabled={isCreatingTag || !newTagInput.trim()}>{isCreatingTag ? "جاري الإضافة..." : "إضافة"}</Button>
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -1089,7 +1089,7 @@ export default function EditCoursePage() {
                         <div className="hidden space-y-4 xl:order-1 xl:block xl:sticky xl:top-24 xl:self-start" dir="rtl">
                             <div className="space-y-2">
                                 <h3 className="text-base font-bold text-slate-900">معاينة الدورة</h3>
-                                <p className="text-xs text-slate-500">هذا الشكل التقريبي لظهور الدورة ف�Š صفحة الاستعراض.</p>
+                                <p className="text-xs text-slate-500">هذا الشكل التقريبي لظهور الدورة في صفحة الاستعراض.</p>
                             </div>
                             <article className="group flex flex-col overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-[0_10px_24px_rgba(15,23,42,0.06)]">
                                 <div className="relative h-[188px] overflow-hidden bg-slate-100 md:h-[196px]">
@@ -1100,7 +1100,7 @@ export default function EditCoursePage() {
                                     )}
                                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900/25 via-slate-900/10 to-transparent" />
                                     <span className="absolute bottom-3 right-3 rounded-full bg-white/86 px-2.5 py-1 text-[11px] font-semibold text-slate-700 backdrop-blur-[2px]">
-                                        {selectedCategoryName || "ا�„فئة"}
+                                        {selectedCategoryName || "الفئة"}
                                     </span>
                                 </div>
 
@@ -1134,7 +1134,7 @@ export default function EditCoursePage() {
                                                 <button
                                                     type="button"
                                                     className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-red-500 shadow-sm transition-colors hover:bg-slate-50"
-                                                    aria-label="إضافة �„�„�…فض�„ة"
+                                                    aria-label="إضافة للمفضلة"
                                                 >
                                                     <Heart className="h-4 w-4" />
                                                 </button>
@@ -1150,9 +1150,9 @@ export default function EditCoursePage() {
                                 <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-base"><Lightbulb className="h-4 w-4 text-amber-500" />نصائح لدورة ناجحة</CardTitle></CardHeader>
                                 <CardContent className="space-y-2 text-sm text-gray-700">
                                     <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>اجعل العنوان واضحًا ومباشرًا.</span></p>
-                                    <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>استخدم صورة جذابة �ˆاحتراف�Šة.</span></p>
-                                    <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>اكتب �ˆصف�‹ا يوضح فائدة الدورة للطالب.</span></p>
-                                    <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>أضف أ�‡داف�‹ا تعليمية قابلة للقياس.</span></p>
+                                    <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>استخدم صورة جذابة واحترافية.</span></p>
+                                    <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>اكتب وصفًا يوضح فائدة الدورة للطالب.</span></p>
+                                    <p className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>أضف أهدافًا تعليمية قابلة للقياس.</span></p>
                                 </CardContent>
                             </Card>
                         </div>
@@ -1238,7 +1238,7 @@ export default function EditCoursePage() {
                                                 <div className="flex flex-wrap items-center gap-3 text-sm mt-1">
                                                     <span className="flex items-center gap-1.5 bg-white text-gray-700 px-2 py-1.5 rounded-[6.5px] border shadow-sm"><Building className="h-4 w-4 text-purple-500" /> معهد: <strong>{selectedHall.owner}</strong> </span>
                                                     <span className="flex items-center gap-1.5 bg-white text-gray-700 px-2 py-1.5 rounded-[6.5px] border shadow-sm"><Users className="h-4 w-4 text-blue-500" /> السعة: <strong>{selectedHall.capacity}</strong> </span>
-                                                    <span className="flex items-center gap-1.5 bg-white text-gray-700 px-2 py-1.5 rounded-[6.5px] border shadow-sm"><Banknote className="h-4 w-4 text-green-500" /> ا�„ت�ƒ�„فة: <strong>{selectedHall.hourlyRate} ر.ي/ساعة</strong></span>
+                                                    <span className="flex items-center gap-1.5 bg-white text-gray-700 px-2 py-1.5 rounded-[6.5px] border shadow-sm"><Banknote className="h-4 w-4 text-green-500" /> التكفة: <strong>{selectedHall.hourlyRate} ر.ي/ساعة</strong></span>
                                                 </div>
                                             </div>
                                             <Button variant="ghost" size="sm" className="text-gray-500 hover:text-blue-600 hover:bg-white border w-full md:w-auto mt-2 md:mt-0" onClick={(e) => { e.stopPropagation(); setIsHallDialogOpen(true); }}>
@@ -1444,7 +1444,7 @@ export default function EditCoursePage() {
                                                                         <tr className="text-xs font-semibold text-slate-600">
                                                                             <th className="px-3 py-2.5 w-8">#</th>
                                                                             <th className="px-3 py-2.5">التاريخ</th>
-                                                                            <th className="px-3 py-2.5">ا�„فترة</th>
+                                                                            <th className="px-3 py-2.5">الفترة</th>
                                                                             <th className="px-3 py-2.5">عنوان الجلسة</th>
                                                                         </tr>
                                                                     </thead>
@@ -1460,7 +1460,7 @@ export default function EditCoursePage() {
                                                                                     <Input
                                                                                         value={s.topic}
                                                                                         onChange={e => updateSessionTopic(s.date, s.slot, e.target.value)}
-                                                                                        placeholder={`مثال: الجلسة ${idx + 1} � المقدمة`}
+                                                                                        placeholder={`مثال: الجلسة ${idx + 1} - المقدمة`}
                                                                                         className="h-8 text-sm"
                                                                                     />
                                                                                 </td>
@@ -1476,7 +1476,7 @@ export default function EditCoursePage() {
                                                             <div className="space-y-3">
                                                                 {labelingRules.length === 0 && (
                                                                     <p className="text-sm text-slate-500 text-center py-3 border border-dashed border-slate-200 rounded-lg bg-white">
-                                                                        لا توجد قواعد عنونة بعد � اضغط «إضافة قاعدة� لتبدأ
+                                                                        لا توجد قواعد عنونة بعد، اضغط «إضافة قاعدة» لتبدأ
                                                                     </p>
                                                                 )}
                                                                 {labelingRules.map(rule => (
@@ -1534,7 +1534,7 @@ export default function EditCoursePage() {
                                                                                 <tr className="text-xs text-slate-500">
                                                                                     <th className="px-3 py-2">#</th>
                                                                                     <th className="px-3 py-2">التاريخ</th>
-                                                                                    <th className="px-3 py-2">ا�„فترة</th>
+                                                                                    <th className="px-3 py-2">الفترة</th>
                                                                                     <th className="px-3 py-2">العنوان</th>
                                                                                 </tr>
                                                                             </thead>
@@ -1569,9 +1569,9 @@ export default function EditCoursePage() {
                                                     <CardHeader className="pb-3">
                                                         <CardTitle className="text-base flex items-center gap-2">
                                                             <Banknote className="h-5 w-5 text-blue-600" />
-                                                            بيانات ا�„دفع لحجز القاعة
+                                                            بيانات الدفع لحجز القاعة
                                                         </CardTitle>
-                                                        <CardDescription>يرجى تحويل مبلغ {formatNumber(totalPrice)} ر.ي إلى أحد الحسابات التالية �ˆإرفا�‚ صورة السند أدناه</CardDescription>
+                                                        <CardDescription>يرجى تحويل مبلغ {formatNumber(totalPrice)} ر.ي إلى أحد الحسابات التالية وإرفاق صورة السند أدناه</CardDescription>
                                                     </CardHeader>
                                                     <CardContent className="space-y-6">
 
@@ -1608,7 +1608,7 @@ export default function EditCoursePage() {
                                                                 </div>
                                                             ) : (
                                                                 <div className="text-sm text-gray-500 italic p-3 bg-gray-50 rounded-[6.5px] border border-dashed">
-                                                                    لا توجد حسابات بنكية �…ضافة لهذا المعهد حاليًا. يمكنك التواصل مع المعهد مباشرة.
+                                                                    لا توجد حسابات بنكية مضافة لهذا المعهد حاليًا. يمكنك التواصل مع المعهد مباشرة.
                                                                 </div>
                                                             )}
                                                         </div>
@@ -1629,8 +1629,8 @@ export default function EditCoursePage() {
                                                                     <div className="bg-blue-100 p-3 rounded-full w-fit mx-auto mb-3">
                                                                         <Plus className="h-6 w-6 text-blue-600" />
                                                                     </div>
-                                                                    <p className="font-medium text-gray-700">إرفا�‚ صورة سند ا�„دفع</p>
-                                                                    <p className="text-xs text-gray-500 mt-1">اضغط هنا �„رفع ا�„�…�„ف (JPG, PNG)</p>
+                                                                    <p className="font-medium text-gray-700">إرفاق صورة سند الدفع</p>
+                                                                    <p className="text-xs text-gray-500 mt-1">اضغط هنا رفع المف (JPG, PNG)</p>
                                                                 </div>
                                                             )}
                                                             <input
@@ -1645,7 +1645,7 @@ export default function EditCoursePage() {
                                                         <div className="flex items-start gap-2 text-xs text-amber-600 bg-amber-50 p-3 rounded-lg border border-amber-100">
                                                             <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
                                                             <p>
-                                                                سيتم مراجعة طلب حجز القاعة وتأكيده من قبل إدارة المعهد قبل تفع�Š�„ الدورة بشكل نهائي.
+                                                                سيتم مراجعة طلب حجز القاعة وتأكيده من قبل إدارة المعهد قبل تفعي الدورة بشكل نهائي.
                                                                 تأكد من وضوح بيانات السند لتسريع عملية القبول.
                                                             </p>
                                                         </div>
@@ -1733,7 +1733,7 @@ export default function EditCoursePage() {
                                             </div>
                                             <div className="space-y-1">
                                                 <Label className="text-xs">عنوان الجلسة (اختياري)</Label>
-                                                <Input placeholder="مثال: المقدمة �ˆا�„تعر�Šف بالمنهج" value={session.topic} onChange={e => updateOnlineSession(idx, 'topic', e.target.value)} />
+                                                <Input placeholder="مثال: المقدمة والتعريف بالمنهج" value={session.topic} onChange={e => updateOnlineSession(idx, 'topic', e.target.value)} />
                                             </div>
                                         </div>
                                     ))}
@@ -1771,7 +1771,7 @@ export default function EditCoursePage() {
                                     id="btn-publish-course"
                                 >
                                     {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
-                                    {courseData.deliveryType === 'in_person' ? 'إرسال للمراجعة' : 'نشر �ˆتفع�Š�„ الدورة'}
+                                    {courseData.deliveryType === 'in_person' ? 'إرسال للمراجعة' : 'نشر وتفعي الدورة'}
                                 </Button>
                             )}
 
@@ -1810,5 +1810,6 @@ export default function EditCoursePage() {
         </div>
     )
 }
+
 
 

@@ -330,22 +330,22 @@ export default function AdminDashboard() {
     [institutes]
   )
 
-  const bannerStats = [
-    { title: "إجمالي المستخدمين", value: 26, icon: <Users className="h-5 w-5" />, tone: "blue" as const },
-    { title: "إجمالي المدربين", value: 7, icon: <UserCheck className="h-5 w-5" />, tone: "emerald" as const },
-    { title: "إجمالي المعاهد", value: 5, icon: <Building2 className="h-5 w-5" />, tone: "amber" as const },
-    { title: "الإشعارات الجديدة", value: 0, icon: <Bell className="h-5 w-5" />, tone: "violet" as const },
-  ]
-
   const stats = useMemo(
     () => ({
-      totalUsers: dashboardStats?.stats.totalUsers ?? 26,
-      totalTrainers: trainers.length || 7,
-      totalInstitutes: institutes.length || 5,
+      totalUsers: dashboardStats?.stats.totalUsers ?? 0,
+      totalTrainers: trainers.length,
+      totalInstitutes: dashboardStats?.stats.totalInstitutes ?? institutes.length,
       newNotifications: notifications.filter((notification) => !notification.isRead).length,
     }),
     [dashboardStats, institutes.length, notifications, trainers.length]
   )
+
+  const bannerStats = [
+    { title: "إجمالي المستخدمين", value: stats.totalUsers, icon: <Users className="h-5 w-5" />, tone: "blue" as const },
+    { title: "إجمالي المدربين", value: stats.totalTrainers, icon: <UserCheck className="h-5 w-5" />, tone: "emerald" as const },
+    { title: "إجمالي المعاهد", value: stats.totalInstitutes, icon: <Building2 className="h-5 w-5" />, tone: "amber" as const },
+    { title: "الإشعارات الجديدة", value: stats.newNotifications, icon: <Bell className="h-5 w-5" />, tone: "violet" as const },
+  ]
 
   if (loading) {
     return (
