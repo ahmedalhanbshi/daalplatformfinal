@@ -17,3 +17,5 @@ auth-backend/.env.*
 .env.local
 
 .vercel
+.vscode/
+.build-*.txt
