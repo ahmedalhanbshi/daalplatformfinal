@@ -134,7 +134,7 @@ export default function InstituteAnnouncements() {
       setIsCreateDialogOpen(false)
       fetchData()
     } catch (error: any) {
-      toast.error(error.message || "فش�„ ف�Š حفظ الإعلان")
+      toast.error(error.message || "فشل في حفظ الإعلان")
     } finally {
       setSubmitting(false)
     }
@@ -163,12 +163,12 @@ export default function InstituteAnnouncements() {
       try {
         setSubmitting(true)
         await instituteService.deleteAnnouncement(announcementToDelete)
-        toast.success("تم ا�„حذف بنجاح")
+        toast.success("تم الحذف بنجاح")
         setIsDeleteDialogOpen(false)
         setAnnouncementToDelete(null)
         fetchData()
       } catch (error: any) {
-        toast.error(error.message || "فش�„ حذف الإعلان")
+        toast.error(error.message || "فشل حذف الإعلان")
       } finally {
         setSubmitting(false)
       }
@@ -260,14 +260,14 @@ export default function InstituteAnnouncements() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                   <Label className="block mb-1">الجمهور ا�„�…ست�‡دف</Label>
+                   <Label className="block mb-1">الجمهور المستهدف</Label>
                    <Select value={formData.targetAudience} onValueChange={(value) => setFormData({ ...formData, targetAudience: value, selectedRecipients: [], courseId: "" })}>
                     <SelectTrigger className="text-right">
                       <SelectValue placeholder="اختر الجمهور" />
                     </SelectTrigger>
                     <SelectContent className="text-right">
                       <SelectItem value="STUDENTS">الطلاب</SelectItem>
-                      <SelectItem value="TRAINERS">المدربين (إيميل ف�‚ط)</SelectItem>
+                      <SelectItem value="TRAINERS">المدربين (إيميل فقط)</SelectItem>
                       <SelectItem value="ALL">الجميع (طلاب + مدربين)</SelectItem>
                       <SelectItem value="DIRECT_BOOKERS">أصحاب الحجز المباشر</SelectItem>
                     </SelectContent>
@@ -344,7 +344,7 @@ export default function InstituteAnnouncements() {
                   )}
                 </div>
                 <p className="text-[10px] text-muted-foreground italic text-right">
-                  * اتركه فارغا�‹ للإرسال للجميع تلقائياً. إعلانات المدربين ترسل كإيميل ف�‚ط.
+                  * اتركه فارغًا للإرسال للجميع تلقائيًا. إعلانات المدربين ترسل كإيميل فقط.
                 </p>
               </div>
 
@@ -415,7 +415,7 @@ export default function InstituteAnnouncements() {
             <div className="text-2xl font-bold">
               {announcements.filter(a => a.targetAudience === 'TRAINERS').length}
             </div>
-            <p className="text-xs text-muted-foreground">بريد إلكتروني ف�‚ط</p>
+            <p className="text-xs text-muted-foreground">بريد إلكتروني فقط</p>
           </CardContent>
         </Card>
       </div>
@@ -519,9 +519,9 @@ export default function InstituteAnnouncements() {
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-right">تأكيد ا�„حذف</DialogTitle>
+            <DialogTitle className="text-right">تأكيد الحذف</DialogTitle>
             <DialogDescription className="text-right">
-              هل أنت متأكد من رغبتك ف�Š حذف هذا الإعلان؟ لا يمكن التراجع عن هذا الإجراء.
+              هل أنت متأكد من رغبتك في حذف هذا الإعلان؟ لا يمكن التراجع عن هذا الإجراء.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-0 justify-start flex-row-reverse">

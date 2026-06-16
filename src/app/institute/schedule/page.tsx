@@ -300,7 +300,7 @@ export default function InstituteSchedulePage() {
         })
         setAvailableSlots(openSlots)
       } catch {
-        toast.error("فش�„ جلب أوقات القاعة")
+        toast.error("فشل جلب أوقات القاعة")
       } finally {
         setIsSlotsLoading(false)
       }
@@ -409,7 +409,7 @@ export default function InstituteSchedulePage() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-right">
             <h1 className="mb-1 text-2xl font-bold">جدول الجلسات</h1>
-            <p className="text-sm text-blue-100">جميع الجلسات المقررة ف�Š قاعات المعهد</p>
+            <p className="text-sm text-blue-100">جميع الجلسات المقررة في قاعات المعهد</p>
           </div>
           <div className={`flex items-center gap-2 bg-white/10 px-3 py-2 text-sm ${radiusClass}`}>
             <CalendarIcon className="h-4 w-4 opacity-80" />
@@ -532,8 +532,8 @@ export default function InstituteSchedulePage() {
       {filteredSessions.length === 0 ? (
         <div className={`border-2 border-dashed border-slate-200 bg-slate-50 p-12 text-center ${radiusClass}`}>
           <CalendarIcon className="mx-auto mb-4 h-12 w-12 text-slate-300" />
-          <h3 className="mb-2 text-lg font-semibold text-slate-900">لا توجد جلسات مطابقة �„�„ف�„اتر</h3>
-          <p className="text-slate-500">جرّب تغيير ا�„ف�„اتر لعرض نتائج أكثر</p>
+          <h3 className="mb-2 text-lg font-semibold text-slate-900">لا توجد جلسات مطابقة للفلاتر</h3>
+          <p className="text-slate-500">جرّب تغيير الفلاتر لعرض نتائج أكثر</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -634,7 +634,7 @@ export default function InstituteSchedulePage() {
           <DialogHeader className="w-full text-right sm:text-right">
             <DialogTitle className="w-full text-right">تعديل موعد الجلسة</DialogTitle>
             <DialogDescription className="w-full text-right">
-              {selectedSession?.title} � {selectedSession?.courseTitle}
+              {selectedSession?.title} - {selectedSession?.courseTitle}
             </DialogDescription>
           </DialogHeader>
 
@@ -760,7 +760,7 @@ export default function InstituteSchedulePage() {
                           ))}
                         </div>
                       ) : (
-                        <p className="py-4 text-center text-sm text-gray-500">لا يوجد أوقات متاحة ف�Š هذا اليوم</p>
+                        <p className="py-4 text-center text-sm text-gray-500">لا توجد أوقات متاحة في هذا اليوم</p>
                       )}
                     </div>
                   )}

@@ -75,7 +75,7 @@ export default function InstituteCourses() {
       const data = await instituteService.getCourses()
       setCourses(data)
     } catch (err: any) {
-      setError(err?.response?.data?.message || "فش�„ ف�Š جلب الدورات")
+      setError(err?.response?.data?.message || "فشل في جلب الدورات")
     } finally {
       setLoading(false)
     }
@@ -130,7 +130,7 @@ export default function InstituteCourses() {
       toast.success("تم حذف الدورة بنجاح")
       setCourseToDelete(null)
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "فش�„ حذف الدورة")
+      toast.error(err?.response?.data?.message || "فشل حذف الدورة")
     } finally {
       setIsDeleting(false)
     }
@@ -147,7 +147,7 @@ export default function InstituteCourses() {
       case "pending_payment":
       case "pending_approval":
       case "pending_review":
-        return <Badge className="rounded-[6.5px] bg-amber-100 text-amber-700 hover:bg-amber-100">بانتظار ا�„�…�ˆاف�‚ة على ا�„دفع</Badge>
+        return <Badge className="rounded-[6.5px] bg-amber-100 text-amber-700 hover:bg-amber-100">بانتظار الموافقة على الدفع</Badge>
       case "draft":
         return <Badge className="rounded-[6.5px] bg-slate-100 text-slate-700 hover:bg-slate-100">مسودة</Badge>
       case "cancelled":
@@ -177,7 +177,7 @@ export default function InstituteCourses() {
           <div className="rounded-[6.5px] border border-[#E5EAF2] bg-white px-3 py-2.5"><div className="mb-1 inline-flex h-7 w-7 items-center justify-center rounded-[6.5px] bg-blue-50 text-blue-600"><BookCopy className="h-4 w-4" /></div><p className="text-[12px] text-slate-500">إجمالي الدورات</p><p className="text-xl font-bold text-slate-900">{stats.totalCourses}</p></div>
           <div className="rounded-[6.5px] border border-[#E5EAF2] bg-white px-3 py-2.5"><div className="mb-1 inline-flex h-7 w-7 items-center justify-center rounded-[6.5px] bg-cyan-50 text-cyan-600"><Users className="h-4 w-4" /></div><p className="text-[12px] text-slate-500">إجمالي الطلاب</p><p className="text-xl font-bold text-slate-900">{stats.totalStudents}</p></div>
           <div className="rounded-[6.5px] border border-[#E5EAF2] bg-white px-3 py-2.5"><div className="mb-1 inline-flex h-7 w-7 items-center justify-center rounded-[6.5px] bg-emerald-50 text-emerald-600"><Clock3 className="h-4 w-4" /></div><p className="text-[12px] text-slate-500">الدورات النشطة</p><p className="text-xl font-bold text-slate-900">{stats.activeCourses}</p></div>
-          <div className="rounded-[6.5px] border border-[#E5EAF2] bg-white px-3 py-2.5"><div className="mb-1 inline-flex h-7 w-7 items-center justify-center rounded-[6.5px] bg-amber-50 text-amber-600"><CircleDollarSign className="h-4 w-4" /></div><p className="text-[12px] text-slate-500">بانتظار ا�„�…�ˆاف�‚ة</p><p className="text-xl font-bold text-slate-900">{stats.pendingApproval}</p></div>
+          <div className="rounded-[6.5px] border border-[#E5EAF2] bg-white px-3 py-2.5"><div className="mb-1 inline-flex h-7 w-7 items-center justify-center rounded-[6.5px] bg-amber-50 text-amber-600"><CircleDollarSign className="h-4 w-4" /></div><p className="text-[12px] text-slate-500">بانتظار الموافقة</p><p className="text-xl font-bold text-slate-900">{stats.pendingApproval}</p></div>
         </div>
 
         <div className="rounded-[6.5px] border border-[#E5EAF2] bg-white p-3">
@@ -237,14 +237,14 @@ export default function InstituteCourses() {
                   <div className="min-w-0 text-right">
                     <h3 className="truncate text-sm font-bold text-slate-900">{normalizeText(course.title)}</h3>
                     <div className="mt-1">
-                      <Badge className="rounded-[6.5px] bg-slate-100 text-slate-700 hover:bg-slate-100">{normalizeText(course.category) || "ا�„فئة"}</Badge>
+                      <Badge className="rounded-[6.5px] bg-slate-100 text-slate-700 hover:bg-slate-100">{normalizeText(course.category) || "الفئة"}</Badge>
                     </div>
                     <p className="mt-1 truncate text-xs text-slate-500">{normalizeText(course.shortDescription || course.description || "")}</p>
                   </div>
                 </section>
                 <section className="text-center text-sm font-semibold text-slate-700">{course.enrolledStudents || 0}/{course.maxStudents || 0}</section>
                 <section className="text-center text-sm font-semibold text-[#2563EB]">{formatPrice(course.price)} ر.ي</section>
-                <section className="text-center text-sm text-slate-700">{course.startDate ? formatDate(course.startDate) : <span className="text-xs text-amber-600 font-medium">س�Šُحد�Ž�‘د لاحقاً</span>}</section>
+                <section className="text-center text-sm text-slate-700">{course.startDate ? formatDate(course.startDate) : <span className="text-xs text-amber-600 font-medium">سيُحدد لاحقًا</span>}</section>
                 <section className="text-center">{getStatusBadge(course.status)}</section>
                 <section className="flex justify-center">
                   <DropdownMenu dir="rtl">
@@ -254,7 +254,7 @@ export default function InstituteCourses() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="rounded-[6.5px]">
-                      <DropdownMenuItem asChild><Link href={`/institute/courses/${course.id}`}><Eye className="ml-2 h-4 w-4" />عرض ا�„تفاص�Š�„</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link href={`/institute/courses/${course.id}`}><Eye className="ml-2 h-4 w-4" />عرض التفاصيل</Link></DropdownMenuItem>
                       <DropdownMenuItem asChild><Link href={`/institute/courses/create?editId=${course.id}`}><Edit className="ml-2 h-4 w-4" />تعديل الدورة</Link></DropdownMenuItem>
                       <DropdownMenuItem asChild><Link href={`/institute/students?courseId=${course.id}`}><UserCheck className="ml-2 h-4 w-4" />إدارة الطلاب</Link></DropdownMenuItem>
                       <DropdownMenuItem className="text-rose-700 focus:text-rose-700 cursor-pointer" onClick={() => setCourseToDelete(course)}><Trash2 className="ml-2 h-4 w-4" />حذف الدورة</DropdownMenuItem>
@@ -270,13 +270,13 @@ export default function InstituteCourses() {
                 <div className="text-right">
                   <h3 className="text-sm font-bold text-slate-900">{normalizeText(course.title)}</h3>
                   <div className="mt-1">
-                    <Badge className="rounded-[6.5px] bg-slate-100 text-slate-700 hover:bg-slate-100">{normalizeText(course.category) || "ا�„فئة"}</Badge>
+                    <Badge className="rounded-[6.5px] bg-slate-100 text-slate-700 hover:bg-slate-100">{normalizeText(course.category) || "الفئة"}</Badge>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="rounded-[6.5px] border border-slate-200 p-2 text-right"><p className="text-xs text-slate-500">الطلاب</p><p className="font-semibold text-slate-800">{course.enrolledStudents || 0}/{course.maxStudents || 0}</p></div>
                   <div className="rounded-[6.5px] border border-slate-200 p-2 text-right"><p className="text-xs text-slate-500">السعر</p><p className="font-semibold text-[#2563EB]">{formatPrice(course.price)} ر.ي</p></div>
-                  <div className="rounded-[6.5px] border border-slate-200 p-2 text-right"><p className="text-xs text-slate-500">تاريخ البداية</p><p className="font-semibold text-slate-800">{course.startDate ? formatDate(course.startDate) : <span className="text-xs text-amber-600">س�Šُحد�Ž�‘د لاحقاً</span>}</p></div>
+                  <div className="rounded-[6.5px] border border-slate-200 p-2 text-right"><p className="text-xs text-slate-500">تاريخ البداية</p><p className="font-semibold text-slate-800">{course.startDate ? formatDate(course.startDate) : <span className="text-xs text-amber-600">سيُحدد لاحقًا</span>}</p></div>
                   <div className="rounded-[6.5px] border border-slate-200 p-2 text-right"><p className="text-xs text-slate-500">الحالة</p>{getStatusBadge(course.status)}</div>
                 </div>
                 <div className="flex justify-start">
@@ -285,7 +285,7 @@ export default function InstituteCourses() {
                       <Button variant="outline" className="h-9 rounded-[6.5px] px-4 text-sm font-semibold">الإجراءات</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="rounded-[6.5px]">
-                      <DropdownMenuItem asChild><Link href={`/institute/courses/${course.id}`}><Eye className="ml-2 h-4 w-4" />عرض ا�„تفاص�Š�„</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link href={`/institute/courses/${course.id}`}><Eye className="ml-2 h-4 w-4" />عرض التفاصيل</Link></DropdownMenuItem>
                       <DropdownMenuItem asChild><Link href={`/institute/courses/create?editId=${course.id}`}><Edit className="ml-2 h-4 w-4" />تعديل الدورة</Link></DropdownMenuItem>
                       <DropdownMenuItem asChild><Link href={`/institute/students?courseId=${course.id}`}><UserCheck className="ml-2 h-4 w-4" />إدارة الطلاب</Link></DropdownMenuItem>
                       <DropdownMenuItem className="text-rose-700 focus:text-rose-700 cursor-pointer" onClick={() => setCourseToDelete(course)}><Trash2 className="ml-2 h-4 w-4" />حذف الدورة</DropdownMenuItem>
@@ -314,7 +314,7 @@ export default function InstituteCourses() {
                 <div className="space-y-1 text-right">
                   <DialogTitle className="text-lg font-bold text-slate-900">حذف الدورة</DialogTitle>
                   <DialogDescription className="text-sm leading-6 text-slate-600">
-                    هل أنت متأكد من حذف دورة �{normalizeText(courseToDelete?.title || "دورة غير �…عر�ˆفة")}�؟ لا يمكن التراجع عن هذا الإجراء بعد ا�„حذف.
+                    هل أنت متأكد من حذف دورة ({normalizeText(courseToDelete?.title || "دورة غير معروفة")})؟ لا يمكن التراجع عن هذا الإجراء بعد الحذف.
                   </DialogDescription>
                 </div>
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[6.5px] bg-red-50 text-red-600">
@@ -339,7 +339,7 @@ export default function InstituteCourses() {
                 onClick={confirmDeleteCourse}
                 disabled={isDeleting}
               >
-                {isDeleting ? "جاري ا�„حذف..." : "حذف الدورة"}
+                {isDeleting ? "جاري الحذف..." : "حذف الدورة"}
               </Button>
             </div>
           </div>

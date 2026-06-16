@@ -7,19 +7,29 @@ interface NotificationMessageProps {
   isFull?: boolean
 }
 
+function decodeMojibake(value: string) {
+  if (!/[ØÙÃ]/.test(value)) return value
+
+  try {
+    const bytes = Uint8Array.from(Array.from(value), (char) => char.charCodeAt(0) & 0xff)
+    return new TextDecoder("utf-8", { fatal: false }).decode(bytes)
+  } catch {
+    return value
+  }
+}
+
 export function NotificationMessage({ message, isFull = false }: NotificationMessageProps) {
   if (!message) return null
 
-  // Split by the separator if it exists
-  const parts = message.split("---")
+  const displayMessage = decodeMojibake(message)
+  const parts = displayMessage.split("---")
   const mainMessage = parts[0].trim()
   const metadataStr = parts.length > 1 ? parts[1].trim() : ""
 
   if (!metadataStr) {
-    return <p className={`text-sm ${isFull ? "text-gray-700 leading-relaxed" : "text-gray-500 truncate"}`}>{message}</p>
+    return <p className={`text-sm ${isFull ? "text-gray-700 leading-relaxed" : "text-gray-500 truncate"}`}>{displayMessage}</p>
   }
 
-  // Define the labels we're looking for
   const labels = [
     { key: "المعهد:", icon: <Building2 className="h-3.5 w-3.5" />, color: "text-blue-500" },
     { key: "المرسل:", icon: <User className="h-3.5 w-3.5" />, color: "text-purple-500" },
@@ -27,35 +37,31 @@ export function NotificationMessage({ message, isFull = false }: NotificationMes
     { key: "البريد:", icon: <Mail className="h-3.5 w-3.5" />, color: "text-red-500" },
   ]
 
-  // Extract metadata values
   const metadata: { label: string; value: string; icon: React.ReactNode; color: string }[] = []
-  
   const remainingStr = metadataStr
-  
+
   labels.forEach((label, index) => {
     if (remainingStr.includes(label.key)) {
-      const nextLabel = labels.slice(index + 1).find(l => remainingStr.includes(l.key))
+      const nextLabel = labels.slice(index + 1).find((item) => remainingStr.includes(item.key))
       const start = remainingStr.indexOf(label.key) + label.key.length
       const end = nextLabel ? remainingStr.indexOf(nextLabel.key) : remainingStr.length
-      
+
       let value = remainingStr.slice(start, end).trim()
-      // Remove any emojis that might be part of the value (backend sometimes adds them)
       value = value.replace(/[🏛️👤📞✉️]/g, "").trim()
-      
+
       if (value) {
         metadata.push({
           label: label.key.replace(":", ""),
-          value: value,
+          value,
           icon: label.icon,
-          color: label.color
+          color: label.color,
         })
       }
     }
   })
 
-  // If the announcement is from an institute, we don't need to show the sender since they are the same
-  const hasInstitute = metadata.some(m => m.label === "المعهد");
-  const displayMetadata = hasInstitute ? metadata.filter(m => m.label !== "المرسل") : metadata;
+  const hasInstitute = metadata.some((item) => item.label === "المعهد")
+  const displayMetadata = hasInstitute ? metadata.filter((item) => item.label !== "المرسل") : metadata
 
   if (!isFull) {
     return (
@@ -86,11 +92,11 @@ export function NotificationMessage({ message, isFull = false }: NotificationMes
       {displayMetadata.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
           {displayMetadata.map((item, idx) => (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 bg-white hover:border-gray-200 transition-colors"
             >
-              <div className={`p-2 rounded-md ${item.color.replace('text', 'bg')}/10 ${item.color}`}>
+              <div className={`p-2 rounded-md ${item.color.replace("text", "bg")}/10 ${item.color}`}>
                 {item.icon}
               </div>
               <div className="min-w-0">

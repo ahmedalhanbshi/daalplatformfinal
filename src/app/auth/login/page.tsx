@@ -42,7 +42,6 @@ function LoginPageContent() {
   })
   const [showPassword, setShowPassword] = useState(false)
 
-  // Check if user just registered
   const registered = searchParams.get("registered")
   useEffect(() => {
     if (registered === "true") {
@@ -50,7 +49,6 @@ function LoginPageContent() {
     }
   }, [registered])
 
-  // Role-based redirection after successful login
   useEffect(() => {
     if (user && !authLoading) {
       const redirectTarget = searchParams.get("redirect")
@@ -64,7 +62,6 @@ function LoginPageContent() {
         return
       }
 
-      // Redirect based on user role from backend
       switch (user.role) {
         case "STUDENT":
           router.push("/student/dashboard")
@@ -91,7 +88,6 @@ function LoginPageContent() {
 
     try {
       await login(formData.email, formData.password)
-      // Redirect will be handled by useEffect when user state updates
     } catch (err: unknown) {
       const message =
         typeof err === "object" &&
@@ -114,95 +110,94 @@ function LoginPageContent() {
     >
       <div className="flex h-full items-center justify-center -translate-y-2">
         <Card className="mx-auto w-[calc(100%-32px)] max-w-[500px] rounded-[6.5px] border border-[#e2e8f0] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
-        <CardHeader className="px-5 pb-4 pt-6 text-right md:px-8 md:pt-8">
-          <CardTitle className="text-3xl font-extrabold text-slate-900">تسجيل الدخول</CardTitle>
-          <CardDescription className="pt-1 text-sm text-slate-500">أدخل بيانات حسابك للمتابعة</CardDescription>
-        </CardHeader>
+          <CardHeader className="px-5 pb-4 pt-6 text-right md:px-8 md:pt-8">
+            <CardTitle className="text-3xl font-extrabold text-slate-900">تسجيل الدخول</CardTitle>
+            <CardDescription className="pt-1 text-sm text-slate-500">أدخل بيانات حسابك للمتابعة</CardDescription>
+          </CardHeader>
 
-        <CardContent className="px-5 pb-6 md:px-8 md:pb-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {successMessage && (
-              <Alert className="border-green-200 bg-green-50 text-green-900">
-                <AlertDescription>{successMessage}</AlertDescription>
-              </Alert>
-            )}
+          <CardContent className="px-5 pb-6 md:px-8 md:pb-8">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {successMessage && (
+                <Alert className="border-green-200 bg-green-50 text-green-900">
+                  <AlertDescription>{successMessage}</AlertDescription>
+                </Alert>
+              )}
 
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
 
-            <div className="space-y-2 text-right">
-              <Label htmlFor="email" className="text-sm font-medium text-slate-700">
-                البريد الإلكتروني
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@example.com"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                dir="rtl"
-                className="h-11 rounded-[6.5px] border-slate-300 text-right placeholder:text-right focus-visible:ring-2 focus-visible:ring-[#2563eb]/40 focus-visible:ring-offset-0"
-                required
-              />
-            </div>
-
-            <div className="space-y-2 text-right">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-sm font-medium text-slate-700">
-                  كلمة المرور
+              <div className="space-y-2 text-right">
+                <Label htmlFor="email" className="text-sm font-medium text-slate-700">
+                  البريد الإلكتروني
                 </Label>
-                <Link href="/auth/forgot-password" className="text-sm font-medium text-[#2563eb] hover:text-[#1d4ed8] hover:underline">
-                  نسيت كلمة المرور؟
-                </Link>
-              </div>
-
-              <div className="relative">
                 <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   dir="rtl"
-                  className="h-11 rounded-[6.5px] border-slate-300 pl-11 text-right placeholder:text-right focus-visible:ring-2 focus-visible:ring-[#2563eb]/40 focus-visible:ring-offset-0"
+                  className="h-11 rounded-[6.5px] border-slate-300 text-right placeholder:text-right focus-visible:ring-2 focus-visible:ring-[#2563eb]/40 focus-visible:ring-offset-0"
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
-                  aria-label="إظهار أو إخفاء كلمة المرور"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
               </div>
-            </div>
 
-            <Button type="submit" className="h-[46px] w-full rounded-[6.5px] bg-[#2563eb] text-base font-semibold text-white hover:bg-[#1d4ed8]" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-                  جاري تسجيل الدخول...
-                </>
-              ) : (
-                "دخول"
-              )}
-            </Button>
-          </form>
+              <div className="space-y-2 text-right">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-sm font-medium text-slate-700">
+                    كلمة المرور
+                  </Label>
+                  <Link href="/auth/forgot-password" className="text-sm font-medium text-[#2563eb] hover:text-[#1d4ed8] hover:underline">
+                    نسيت كلمة المرور؟
+                  </Link>
+                </div>
 
-        </CardContent>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    dir="rtl"
+                    className="h-11 rounded-[6.5px] border-slate-300 pl-11 text-right placeholder:text-right focus-visible:ring-2 focus-visible:ring-[#2563eb]/40 focus-visible:ring-offset-0"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
+                    aria-label="إظهار أو إخفاء كلمة المرور"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
 
-        <CardFooter className="flex justify-center px-5 pb-7 pt-0 text-center md:px-8">
-          <p className="text-sm text-slate-500">
-            ليس لديك حساب؟{" "}
-            <Link href="/auth/register" className="font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline">
-              إنشاء حساب جديد
-            </Link>
-          </p>
-        </CardFooter>
+              <Button type="submit" className="h-[46px] w-full rounded-[6.5px] bg-[#2563eb] text-base font-semibold text-white hover:bg-[#1d4ed8]" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                    جاري تسجيل الدخول...
+                  </>
+                ) : (
+                  "دخول"
+                )}
+              </Button>
+            </form>
+          </CardContent>
+
+          <CardFooter className="flex justify-center px-5 pb-7 pt-0 text-center md:px-8">
+            <p className="text-sm text-slate-500">
+              ليس لديك حساب؟{" "}
+              <Link href="/auth/register" className="font-semibold text-[#2563eb] hover:text-[#1d4ed8] hover:underline">
+                إنشاء حساب جديد
+              </Link>
+            </p>
+          </CardFooter>
         </Card>
       </div>
     </div>

@@ -904,7 +904,7 @@ function InstituteStudentsRegistrationsPageContent() {
             <TabsContent value="requests" className="space-y-3">
               {requestStudentFilter ? (
                 <div className="flex flex-wrap items-center justify-between gap-2 rounded-[6.5px] border border-blue-200 bg-blue-50 px-3 py-2 text-sm">
-                  <p className="text-blue-800">عرض نتائج الطالب: <span className="font-semibold">{requestStudentFilter.name}</span>{requestCourseFilter?.title ? ` � ${requestCourseFilter.title}` : ""}</p>
+                  <p className="text-blue-800">عرض نتائج الطالب: <span className="font-semibold">{requestStudentFilter.name}</span>{requestCourseFilter?.title ? ` - ${requestCourseFilter.title}` : ""}</p>
                   <Button
                     type="button"
                     variant="outline"
