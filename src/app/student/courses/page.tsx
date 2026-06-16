@@ -8,7 +8,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 export const dynamic = "force-dynamic"
 import { ChevronDown, Heart, Users, CalendarDays } from "lucide-react"
 import { trainerService, type ExploreCourse } from "@/lib/trainer-service"
-import { getFallbackExploreData } from "@/lib/explore-fallback"
 import { studentService } from "@/lib/student-service"
 import { useAuth } from "@/contexts/auth-context"
 import { toast } from "sonner"
@@ -141,15 +140,13 @@ export function StudentCoursesPageContent(props: StudentCoursesPageProps) {
           sort: (effectiveSort as "newest" | "oldest" | "price_low" | "price_high") || "newest",
         })
         if (!cancelled) {
-          const fallback = getFallbackExploreData()
-          setCourses(data.courses?.length ? data.courses : fallback.courses)
-          setCategories(data.categories?.length ? data.categories : fallback.categories)
+          setCourses(data.courses || [])
+          setCategories(data.categories?.length ? data.categories : [{ id: "all", name: "الكل" }])
         }
       } catch {
         if (!cancelled) {
-          const fallback = getFallbackExploreData()
-          setCourses(fallback.courses)
-          setCategories(fallback.categories)
+          setCourses([])
+          setCategories([{ id: "all", name: "الكل" }])
         }
       } finally {
         if (!cancelled) setLoading(false)
@@ -237,6 +234,13 @@ export function StudentCoursesPageContent(props: StudentCoursesPageProps) {
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {!loading && courses.length === 0 ? (
+            <div className="col-span-full rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-12 text-center shadow-sm">
+              <h3 className="text-lg font-extrabold text-slate-900">لا توجد دورات حاليًا</h3>
+              <p className="mt-2 text-sm font-medium text-slate-500">ستظهر الدورات هنا بعد اعتماد ونشر الدورات من المدربين أو المعاهد.</p>
+            </div>
+          ) : null}
+
           {courses.map((course) => {
             const isFavorite = favoriteIds.includes(course.id)
 
