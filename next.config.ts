@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         destination: `${publicApi.origin}/api/:path*`,
       },
+      {
+        source: "/uploads/:path*",
+        destination: `${publicApi.origin}/uploads/:path*`,
+      },
     ];
   },
   images: {

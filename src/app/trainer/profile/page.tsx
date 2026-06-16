@@ -16,7 +16,7 @@ import { User, Mail, Phone, Eye, EyeOff, Loader2, Camera, X, Plus, ShieldCheck, 
 import { toast } from "sonner"
 import { trainerService } from "@/lib/trainer-service"
 import { useAuth } from "@/contexts/auth-context"
-import { isValidEmail, PROFILE_IMAGE_MAX_SIZE_BYTES, PROFILE_IMAGE_MAX_SIZE_MB } from "@/lib/utils"
+import { getFileUrl, isValidEmail, PROFILE_IMAGE_MAX_SIZE_BYTES, PROFILE_IMAGE_MAX_SIZE_MB } from "@/lib/utils"
 
 type ProfileData = {
     id: string
@@ -300,7 +300,8 @@ export default function TrainerProfilePage() {
     const removeSpecialty = (s: string) =>
         setForm(prev => ({ ...prev, specialties: prev.specialties.filter(x => x !== s) }))
 
-    const avatarSrc = avatarPreview || (profile?.avatar ? `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001"}${profile.avatar}?t=${avatarCacheKey}` : "")
+    const profileAvatarSrc = profile?.avatar ? getFileUrl(profile.avatar) : undefined
+    const avatarSrc = avatarPreview || (profileAvatarSrc ? `${profileAvatarSrc}?t=${avatarCacheKey}` : "")
 
     if (loading) {
         return (
@@ -541,7 +542,7 @@ export default function TrainerProfilePage() {
                                 <div className="space-y-2">
                                     <Label>السيرة الذاتية</Label>
                                     <a
-                                        href={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001"}${profile.cvUrl}`}
+                                        href={getFileUrl(profile.cvUrl) || "#"}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center gap-2 text-sm text-[#2563EB] hover:underline"

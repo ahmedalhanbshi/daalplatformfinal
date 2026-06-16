@@ -51,12 +51,12 @@ export function getFileUrl(path: string | null | undefined): string | undefined 
     return undefined
   }
   if (trimmedPath.startsWith("http") || trimmedPath.startsWith("blob:")) return trimmedPath
-
-  // Set NEXT_PUBLIC_API_URL in production; the local fallback matches the current dev backend.
-  const apiBase = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001").replace(/\/$/, "")
   const cleanPath = trimmedPath.startsWith("/") ? trimmedPath : `/${trimmedPath}`
-
-  return `${apiBase}${cleanPath}`
+  return cleanPath.startsWith("/uploads/")
+    ? cleanPath
+    : cleanPath.startsWith("/uploads")
+      ? cleanPath
+      : `/uploads${cleanPath}`
 }
 
 export function formatTime(date: Date | string | number, options?: Intl.DateTimeFormatOptions) {

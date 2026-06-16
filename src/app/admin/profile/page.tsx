@@ -15,7 +15,7 @@ import { authService } from "@/lib/auth-service"
 import { toast } from "sonner"
 import { useEffect, useRef } from "react"
 import { Camera } from "lucide-react"
-import { isValidEmail, PROFILE_IMAGE_MAX_SIZE_BYTES, PROFILE_IMAGE_MAX_SIZE_MB } from "@/lib/utils"
+import { getFileUrl, isValidEmail, PROFILE_IMAGE_MAX_SIZE_BYTES, PROFILE_IMAGE_MAX_SIZE_MB } from "@/lib/utils"
 
 export default function AdminProfilePage() {
     const { user, updateUser } = useAuth()
@@ -133,7 +133,7 @@ export default function AdminProfilePage() {
                     <CardHeader className="text-center relative">
                         <div className="mx-auto mb-4 relative group">
                             <Avatar className="h-24 w-24">
-                                <AvatarImage src={previewUrl || (profileForm.avatar ? (profileForm.avatar.startsWith('http') ? profileForm.avatar : `http://localhost:5001${profileForm.avatar}`) : "")} />
+                                <AvatarImage src={previewUrl || getFileUrl(profileForm.avatar) || ""} />
                                 <AvatarFallback className="text-2xl">{profileForm.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <button 

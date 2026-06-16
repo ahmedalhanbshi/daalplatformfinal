@@ -28,6 +28,7 @@ import {
   Info,
 } from "lucide-react"
 import { trainerService } from "@/lib/trainer-service"
+import { getFileUrl } from "@/lib/utils"
 import { toast } from "sonner"
 
 export default function TrainerRoomBookingsPage() {
@@ -515,7 +516,7 @@ export default function TrainerRoomBookingsPage() {
                     <div className="mt-2 border-t pt-2">
                       <span className="mb-2 block font-medium text-gray-700">صورة الإيصال:</span>
                       <img
-                        src={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001"}${payment.depositSlipImage}`}
+                        src={getFileUrl(payment.depositSlipImage) || ""}
                         alt="Deposit Slip"
                         className={`h-auto max-w-full border ${radiusClass}`}
                         onError={(e) => {

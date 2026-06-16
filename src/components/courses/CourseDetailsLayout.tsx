@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { getFileUrl } from "@/lib/utils"
 import {
   ArrowRight,
   Calendar,
@@ -30,10 +31,7 @@ export interface CourseDetailsLayoutProps {
 
 function resolveImage(src?: string | null, fallback = "/images/course-web.png") {
   if (!src) return fallback
-  if (src.startsWith("http")) return src
-  const clean = src.replace(/\\/g, "/")
-  const separator = clean.startsWith("/") ? "" : "/"
-  return `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001"}${separator}${clean}`
+  return getFileUrl(src) || fallback
 }
 
 function formatYER(value: number) {

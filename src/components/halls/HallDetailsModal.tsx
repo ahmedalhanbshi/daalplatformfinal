@@ -14,15 +14,11 @@ import { Button } from "@/components/ui/button"
 import { MapPin, ImageIcon, Loader2, Users, X } from "lucide-react"
 import { toast } from "sonner"
 import { trainerService } from "@/lib/trainer-service"
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001"
+import { getFileUrl } from "@/lib/utils"
 
 function resolveImage(src: string | null | undefined): string {
   if (!src) return "/images/course-web.png"
-  if (src.startsWith("http")) return src
-  const cleanSrc = src.replace(/\\/g, "/")
-  const separator = cleanSrc.startsWith("/") ? "" : "/"
-  return `${API_BASE}${separator}${cleanSrc}`
+  return getFileUrl(src) || "/images/course-web.png"
 }
 
 export interface HallDetailsModalProps {
