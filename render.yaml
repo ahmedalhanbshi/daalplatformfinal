@@ -27,6 +27,8 @@ services:
         sync: false
       - key: FRONTEND_URL
         sync: false
+      - key: UPLOADS_DIR
+        value: "/var/data/uploads"
       - key: BCRYPT_ROUNDS
         value: "12"
       - key: MAX_LOGIN_ATTEMPTS
@@ -52,3 +54,4 @@ services:
 
 # Fill the synced values from the Render Dashboard for each environment.
 # Do not place real secrets in this file.
+# For uploaded images, create a Render Persistent Disk mounted at /var/data.

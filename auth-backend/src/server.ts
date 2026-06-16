@@ -15,6 +15,7 @@ import redis from './config/redis';
 import { startSessionScheduler } from './utils/sessionScheduler';
 import { startSessionReminderJob } from './jobs/session-reminder.job';
 import { startAnnouncementScheduler } from './utils/announcementScheduler';
+import { uploadsDir } from './middleware/upload';
 
 const app: Application = express();
 
@@ -70,8 +71,7 @@ app.use(cookieParser());
 app.use(generalLimiter);
 
 // Serve uploaded files
-import path from 'path';
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+app.use('/uploads', express.static(uploadsDir));
 
 // Health check
 app.get('/health', (_req: Request, res: Response) => {
