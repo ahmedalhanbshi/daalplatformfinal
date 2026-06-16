@@ -1,11 +1,23 @@
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { Request } from 'express';
+
+const uploadsDir = path.join(process.cwd(), 'uploads');
+
+function ensureUploadsDir() {
+    if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+}
+
+ensureUploadsDir();
 
 // Configure storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        ensureUploadsDir();
+        cb(null, uploadsDir);
     },
     filename: (req, file, cb) => {
         // Generate unique filename: timestamp-randomstring-originalname

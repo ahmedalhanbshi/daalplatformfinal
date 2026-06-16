@@ -38,6 +38,21 @@ export class AuthController {
 
             // Extract uploaded files from multer
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+            const uploadSummary = Object.fromEntries(
+                Object.entries(files || {}).map(([field, fieldFiles]) => [
+                    field,
+                    fieldFiles.map(file => ({
+                        fieldname: file.fieldname,
+                        path: file.path,
+                        destination: file.destination,
+                        filename: file.filename,
+                    })),
+                ])
+            );
+            console.log('Register upload files:', {
+                hasFiles: Object.keys(files || {}).length > 0,
+                files: uploadSummary,
+            });
 
             const result = await authService.register(data, files);
 
