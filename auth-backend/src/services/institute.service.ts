@@ -1952,7 +1952,7 @@ class InstituteService {
                     userId: requester.id,
                     type: 'BOOKING_STATUS_CHANGE',
                     title: 'تم قبول حجز القاعة',
-                    message: `تمت ا�„�…�ˆاف�‚ة على حجزك لقاعة "${roomName}"`,
+                    message: `تمت الموافقة على حجزك لقاعة "${roomName}"`,
                     relatedEntityId: bookingId,
                     actionUrl: '/trainer/halls', // usually bookings but halls has the list maybe
                     emailFn: requester.email ? () => mailerService.sendBookingApproved(requester.email!, requester.name, roomName) : undefined,
@@ -2708,8 +2708,8 @@ class InstituteService {
         await notificationService.createNotification({
             userId: ownerUserId,
             type: 'MINIMUM_REACHED',
-            title: `🎉 اكتمل الحد الأدنى ف�Š دورة "${course.title}"`,
-            message: `وصل عدد الطلاب المقبولين مبدئياً إلى ${course.minStudents}. يرجى إكمال إعداد الدورة (القاعة + الجلسات) �„تفع�Š�„�‡ا وإشعار الطلاب.`,
+            title: `🎉 اكتمل الحد الأدنى في دورة "${course.title}"`,
+            message: `وصل عدد الطلاب المقبولين مبدئياً إلى ${course.minStudents}. يرجى إكمال إعداد الدورة (القاعة + الجلسات) لتفعيلها وإشعار الطلاب.`,
             actionUrl: setupPath,
             relatedEntityId: courseId,
             emailFn: ownerEmail
@@ -2791,8 +2791,8 @@ class InstituteService {
             data: enrollments.map(e => ({
                 userId: e.student.id,
                 type: 'COURSE_READY_FOR_PAYMENT' as any,
-                title: '🎓 الدورة جاهزة! أكمل عملية ا�„دفع',
-                message: `اكتملت إعدادات دورة "${courseTitle}". يرجى إكمال عملية ا�„دفع لتأكيد مقعدك.`,
+                title: '🎓 الدورة جاهزة! أكمل عملية الدفع',
+                message: `اكتملت إعدادات دورة "${courseTitle}". يرجى إكمال عملية الدفع لتأكيد مقعدك.`,
                 actionUrl: `/student/courses/${courseId}`,
                 relatedEntityId: courseId,
             })),
@@ -3101,7 +3101,7 @@ class InstituteService {
                     status: 'REJECTED',
                     reviewedBy: userId,
                     reviewedAt: new Date(),
-                    rejectionReason: reason || 'تم ا�„رفض من قبل المعهد',
+                    rejectionReason: reason || 'تم الرفض من قبل المعهد',
                 },
             });
 
@@ -3109,8 +3109,8 @@ class InstituteService {
             await notificationService.createNotification({
                 userId: enrollment.student.id,
                 type: 'PAYMENT_REJECTED',
-                title: 'تم رفض سند ا�„دفع',
-                message: `تم رفض سند ا�„دفع الخاص بك ف�Š دورة "${enrollment.course.title}".${reason ? ` السبب: ${reason}` : ''}`,
+                title: 'تم رفض سند الدفع',
+                message: `تم رفض سند الدفع الخاص بك في دورة "${enrollment.course.title}".${reason ? ` السبب: ${reason}` : ''}`,
                 actionUrl: `/student/courses/${enrollment.courseId}`,
                 relatedEntityId: enrollmentId,
                 emailFn: enrollment.student.email
@@ -3144,7 +3144,7 @@ class InstituteService {
                 userId: enrollment.student.id,
                 type: 'ENROLLMENT_REJECTED',
                 title: 'تم رفض طلب التسجيل',
-                message: `تم رفض طلب تسجيلك ف�Š دورة "${enrollment.course.title}". السبب: ${String(reason).trim()}. يمكنك تعديل بياناتك ثم إرسال طلب تسجيل جديد.`,
+                message: `تم رفض طلب تسجيلك في دورة "${enrollment.course.title}". السبب: ${String(reason).trim()}. يمكنك تعديل بياناتك ثم إرسال طلب تسجيل جديد.`,
                 actionUrl: `/student/courses/${enrollment.courseId}`,
                 relatedEntityId: enrollmentId,
             });
@@ -3165,7 +3165,7 @@ class InstituteService {
             // Notify student about rejection/cancellation
             const isCancellation = enrollment.status === 'ACTIVE' || enrollment.status === 'COMPLETED';
             const title = isCancellation ? 'تم إلغاء تسجيلك' : 'تم رفض طلب التسجيل';
-            const messageAction = isCancellation ? 'تم إلغاء تسجيلك ف�Š دورة' : 'تم رفض طلب تسجيلك ف�Š دورة';
+            const messageAction = isCancellation ? 'تم إلغاء تسجيلك في دورة' : 'تم رفض طلب تسجيلك في دورة';
             const message = `${messageAction} "${enrollment.course.title}".${reason ? ` السبب: ${reason}` : ''}`;
 
             await notificationService.createNotification({
@@ -3235,7 +3235,7 @@ class InstituteService {
                             userId: enrollment.student.id,
                             type: 'PRELIMINARY_ACCEPTED_WAITING',
                             title: 'تم قبول تسجيلك المبدئي ✓',
-                            message: `�‚ُب�„ طلبك ف�Š دورة "${enrollment.course.title}". الدورة بانتظار اكتمال الحد الأدنى من الطلاب (${enrollment.course.minStudents}). سيتم إشعارك عند جاهزية الدورة.`,
+                            message: `تم قبول طلبك في دورة "${enrollment.course.title}". الدورة بانتظار اكتمال الحد الأدنى من الطلاب (${enrollment.course.minStudents}). سيتم إشعارك عند جاهزية الدورة.`,
                             actionUrl: `/student/courses/${enrollment.courseId}`,
                             relatedEntityId: enrollmentId,
                             emailFn: enrollment.student.email
@@ -3258,7 +3258,7 @@ class InstituteService {
                             userId: enrollment.student.id,
                             type: 'ENROLLMENT_PRELIMINARY_ACCEPTED',
                             title: 'تم قبول طلبك المبدئي',
-                            message: `تم قبول تسجيلك ف�Š دورة "${enrollment.course.title}". يرجى إكمال عملية ا�„دفع.`,
+                            message: `تم قبول تسجيلك في دورة "${enrollment.course.title}". يرجى إكمال عملية الدفع.`,
                             actionUrl: `/student/courses/${enrollment.courseId}`,
                             relatedEntityId: enrollmentId,
                             emailFn: enrollment.student.email
@@ -3275,8 +3275,8 @@ class InstituteService {
                         await notificationService.createNotification({
                             userId: enrollment.student.id,
                             type: 'PAYMENT_APPROVED',
-                            title: 'تم قبول ا�„دفع ✓',
-                            message: `تم التحقق من دفعت�ƒ لدورة "${enrollment.course.title}" �ˆا�„�…�ˆاف�‚ة عليها. تسجيلك مكتمل الآن.`,
+                            title: 'تم قبول الدفع ✓',
+                            message: `تم التحقق من دفعتك لدورة "${enrollment.course.title}" والموافقة عليها. تسجيلك مكتمل الآن.`,
                             actionUrl: `/student/courses/${enrollment.courseId}`,
                             relatedEntityId: enrollmentId,
                             emailFn: enrollment.student.email
