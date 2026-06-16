@@ -50,7 +50,21 @@ export class AdminService {
 
         return {
             trainers: pendingTrainers,
-            institutes: pendingInstitutes,
+            institutes: pendingInstitutes.map(inst => ({
+                ...inst,
+                address: inst.address,
+                instituteAddress: inst.address,
+                location: inst.address,
+                website: inst.website,
+                instituteWebsite: inst.website,
+                locationUrl: inst.locationUrl,
+                instituteLocationUrl: inst.locationUrl,
+                description: inst.description,
+                instituteDescription: inst.description,
+                license: inst.licenseNumber,
+                commercialRegisterNumber: inst.licenseNumber,
+                commercialRegisterDocument: inst.licenseDocumentUrl,
+            })),
         };
     }
 
@@ -414,7 +428,19 @@ export class AdminService {
             status: inst.user.status === 'SUSPENDED' ? 'suspended' : inst.verificationStatus.toLowerCase(),
             email: inst.email || inst.user.email,
             phone: inst.phone || inst.user.phone,
-            name: inst.name || inst.user.name
+            name: inst.name || inst.user.name,
+            address: inst.address,
+            instituteAddress: inst.address,
+            location: inst.address,
+            website: inst.website,
+            instituteWebsite: inst.website,
+            locationUrl: inst.locationUrl,
+            instituteLocationUrl: inst.locationUrl,
+            description: inst.description,
+            instituteDescription: inst.description,
+            license: inst.licenseNumber,
+            commercialRegisterNumber: inst.licenseNumber,
+            commercialRegisterDocument: inst.licenseDocumentUrl,
         }));
     }
 

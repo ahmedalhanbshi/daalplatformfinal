@@ -196,11 +196,18 @@ class InstituteService {
             instituteName: institute.name,
             instituteLogo: institute.logo,
             instituteAddress: institute.address,
+            address: institute.address,
             instituteWebsite: institute.website,
+            website: institute.website,
             instituteLocationUrl: institute.locationUrl,
+            locationUrl: institute.locationUrl,
             instituteDescription: institute.description,
+            description: institute.description,
             licenseNumber: institute.licenseNumber,
+            commercialRegisterNumber: institute.licenseNumber,
+            license: institute.licenseNumber,
             licenseDocument: institute.licenseDocumentUrl,
+            commercialRegisterDocument: institute.licenseDocumentUrl,
             licenseDocumentUrl: institute.licenseDocumentUrl,
             verificationStatus: institute.verificationStatus,
             features: institute.features,
@@ -222,11 +229,18 @@ class InstituteService {
             publicEmail?: string;
             instituteName?: string;
             instituteAddress?: string;
+            address?: string;
             instituteWebsite?: string;
+            website?: string;
             instituteLocationUrl?: string;
+            locationUrl?: string;
             instituteDescription?: string;
+            description?: string;
             licenseNumber?: string;
+            license?: string;
+            commercialRegisterNumber?: string;
             licenseDocumentUrl?: string;
+            commercialRegisterDocument?: string;
             avatar?: string;
             logo?: string;
             features?: string[] | string;
@@ -269,12 +283,12 @@ class InstituteService {
             where: { id: institute.id },
             data: {
                 name: data.instituteName !== undefined ? data.instituteName : undefined,
-                address: data.instituteAddress !== undefined ? data.instituteAddress : undefined,
-                website: data.instituteWebsite !== undefined ? data.instituteWebsite : undefined,
-                locationUrl: data.instituteLocationUrl !== undefined ? data.instituteLocationUrl : undefined,
-                description: data.instituteDescription !== undefined ? data.instituteDescription : undefined,
-                licenseNumber: data.licenseNumber !== undefined ? data.licenseNumber : undefined,
-                licenseDocumentUrl: data.licenseDocumentUrl !== undefined ? data.licenseDocumentUrl : undefined,
+                address: data.instituteAddress !== undefined ? data.instituteAddress : (data.address !== undefined ? data.address : undefined),
+                website: data.instituteWebsite !== undefined ? data.instituteWebsite : (data.website !== undefined ? data.website : undefined),
+                locationUrl: data.instituteLocationUrl !== undefined ? data.instituteLocationUrl : (data.locationUrl !== undefined ? data.locationUrl : undefined),
+                description: data.instituteDescription !== undefined ? data.instituteDescription : (data.description !== undefined ? data.description : undefined),
+                licenseNumber: data.licenseNumber !== undefined ? data.licenseNumber : (data.license !== undefined ? data.license : (data.commercialRegisterNumber !== undefined ? data.commercialRegisterNumber : undefined)),
+                licenseDocumentUrl: data.licenseDocumentUrl !== undefined ? data.licenseDocumentUrl : (data.commercialRegisterDocument !== undefined ? data.commercialRegisterDocument : undefined),
                 logo: data.logo !== undefined ? data.logo : undefined,
                 phone: data.publicPhone !== undefined ? data.publicPhone : (data.phone !== undefined ? data.phone : undefined),
                 email: data.publicEmail !== undefined ? data.publicEmail : (data.email !== undefined ? data.email : undefined),
@@ -303,11 +317,18 @@ class InstituteService {
             publicPhone: updatedInstitute.phone,
             instituteLogo: updatedInstitute.logo,
             instituteAddress: updatedInstitute.address,
+            address: updatedInstitute.address,
             instituteWebsite: updatedInstitute.website,
+            website: updatedInstitute.website,
             instituteLocationUrl: updatedInstitute.locationUrl,
+            locationUrl: updatedInstitute.locationUrl,
             instituteDescription: updatedInstitute.description,
+            description: updatedInstitute.description,
             licenseNumber: updatedInstitute.licenseNumber,
+            commercialRegisterNumber: updatedInstitute.licenseNumber,
+            license: updatedInstitute.licenseNumber,
             licenseDocument: updatedInstitute.licenseDocumentUrl,
+            commercialRegisterDocument: updatedInstitute.licenseDocumentUrl,
             licenseDocumentUrl: updatedInstitute.licenseDocumentUrl,
             verificationStatus: updatedInstitute.verificationStatus,
         };

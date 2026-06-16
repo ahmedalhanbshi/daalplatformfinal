@@ -378,11 +378,11 @@ function AdminInstitutesContent() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-sm text-gray-500 mb-1">رقم الترخيص</h4>
-                  <p className="text-sm font-medium">{selectedInstitute.licenseNumber || 'غير متوفر'}</p>
+                  <p className="text-sm font-medium">{selectedInstitute.licenseNumber || selectedInstitute.license || selectedInstitute.commercialRegisterNumber || 'غير متوفر'}</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-sm text-gray-500 mb-1">العنوان</h4>
-                  <p className="text-sm font-medium">{selectedInstitute.address || 'غير متوفر'}</p>
+                  <p className="text-sm font-medium">{selectedInstitute.address || selectedInstitute.instituteAddress || selectedInstitute.location || 'غير متوفر'}</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-sm text-gray-500 mb-1">رابط الموقع الجغرافي (الخريطة)</h4>

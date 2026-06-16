@@ -26,10 +26,24 @@ import {
 export class AuthService {
     // Register new user
     async register(data: RegisterInput, files?: { cv?: Express.Multer.File[]; certificates?: Express.Multer.File[]; licenseDocument?: Express.Multer.File[] }) {
-        const { name, email, password, role, phone, license, address } = data as RegisterInput & {
+        const {
+            name,
+            email,
+            password,
+            role,
+            phone,
+            license,
+            licenseNumber,
+            address,
+            instituteAddress,
+        } = data as RegisterInput & {
             license?: string;
+            licenseNumber?: string;
             address?: string;
+            instituteAddress?: string;
         };
+        const resolvedLicenseNumber = license?.trim() || licenseNumber?.trim() || null;
+        const resolvedAddress = address?.trim() || instituteAddress?.trim() || null;
 
         // Check if user exists
         const existingUser = await prisma.user.findUnique({
@@ -76,8 +90,8 @@ export class AuthService {
                     verificationStatus: 'PENDING',
                 },
             });
-        } else if (role === 'INSTITUTE_ADMIN' && files) {
-            const licenseDocumentUrl = files.licenseDocument?.[0] ? `/uploads/${files.licenseDocument[0].filename}` : undefined;
+        } else if (role === 'INSTITUTE_ADMIN') {
+            const licenseDocumentUrl = files?.licenseDocument?.[0] ? `/uploads/${files.licenseDocument[0].filename}` : undefined;
 
             await prisma.institute.create({
                 data: {
@@ -85,8 +99,8 @@ export class AuthService {
                     name: name, // Use user name as institute name initially
                     email: email,
                     phone: phone,
-                    address: address?.trim() || null,
-                    licenseNumber: license?.trim() || null,
+                    address: resolvedAddress,
+                    licenseNumber: resolvedLicenseNumber,
                     licenseDocumentUrl,
                     verificationStatus: 'PENDING',
                 },

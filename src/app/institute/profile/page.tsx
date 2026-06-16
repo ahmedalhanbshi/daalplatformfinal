@@ -273,11 +273,11 @@ export default function InstituteProfilePage() {
             managerName: data.managerName || data.name || "",
             managerPhone: data.managerPhone || data.phone || "",
             adminEmail: data.adminEmail || data.email || "",
-            instituteAddress: data.instituteAddress || data.address || "",
-            instituteWebsite: data.instituteWebsite || data.website || data.instituteLocationUrl || data.locationUrl || data.mapUrl || "",
-            instituteLocationUrl: data.instituteLocationUrl || data.locationUrl || data.mapUrl || data.instituteWebsite || data.website || "",
+            instituteAddress: data.instituteAddress || data.address || data.location || "",
+            instituteWebsite: data.instituteWebsite || data.website || "",
+            instituteLocationUrl: data.instituteLocationUrl || data.locationUrl || data.mapUrl || "",
             instituteDescription: data.instituteDescription || data.description || "",
-            licenseNumber: data.licenseNumber || data.commercialRegisterNumber || "",
+            licenseNumber: data.licenseNumber || data.license || data.commercialRegisterNumber || "",
             documentType: data.documentType || "",
             documentNumber: data.documentNumber || "",
             registrationDate: data.registrationDate || data.createdAt || "",
@@ -383,12 +383,14 @@ export default function InstituteProfilePage() {
       formData.append("managerPhone", user.managerPhone || "")
       formData.append("adminEmail", user.adminEmail || "")
       formData.append("licenseNumber", user.licenseNumber || "")
+      formData.append("license", user.licenseNumber || "")
       formData.append("documentType", user.documentType || "")
       formData.append("documentNumber", user.documentNumber || "")
       formData.append("socialFacebook", user.socialFacebook || "")
       formData.append("socialInstagram", user.socialInstagram || "")
       formData.append("socialX", user.socialX || "")
       formData.append("socialLinkedin", user.socialLinkedin || "")
+      formData.append("address", user.instituteAddress || "")
       if (logoFile) {
         formData.append("avatar", logoFile)
         formData.append("logo", logoFile)

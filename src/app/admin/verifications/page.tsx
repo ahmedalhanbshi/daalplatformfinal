@@ -407,11 +407,11 @@ export default function AdminVerifications() {
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
                                             <Label className="text-muted-foreground">العنوان</Label>
-                                            <div>{viewDialog.data.address || '-'}</div>
+                                            <div>{viewDialog.data.address || viewDialog.data.instituteAddress || viewDialog.data.location || '-'}</div>
                                         </div>
                                         <div>
                                             <Label className="text-muted-foreground">رقم الترخيص</Label>
-                                            <div>{viewDialog.data.licenseNumber || '-'}</div>
+                                            <div>{viewDialog.data.licenseNumber || viewDialog.data.license || viewDialog.data.commercialRegisterNumber || '-'}</div>
                                         </div>
                                     </div>
 
