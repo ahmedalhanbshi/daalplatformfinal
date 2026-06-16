@@ -26,30 +26,6 @@ import {
 } from "@/lib/public-service";
 import { getFileUrl } from "@/lib/utils";
 
-const testimonials = [
-  {
-    id: "t-1",
-    name: "عمر خالد",
-    role: "طالب تطوير واجهات",
-    content: "سجلت خلال دقائق، وبدأت أول دورة في نفس اليوم. المنصة واضحة وسريعة.",
-    avatar: "/images/avatar-1.png",
-  },
-  {
-    id: "t-2",
-    name: "منى السيد",
-    role: "مصممة واجهات",
-    content: "أكثر شيء أعجبني هو ترتيب الدورات وتفاصيلها قبل التسجيل بدون تعقيد.",
-    avatar: "/images/avatar-2.png",
-  },
-  {
-    id: "t-3",
-    name: "سلمان العتيبي",
-    role: "طالب أعمال",
-    content: "الانتقال بين الأونلاين والحضوري كان سهلًا جدًا، والتجربة كلها مريحة.",
-    avatar: "/images/avatar-1.png",
-  },
-];
-
 const features = [
   {
     icon: Compass,
@@ -179,7 +155,6 @@ export default function HomePage() {
   const [coursesData, setCoursesData] = useState<FeaturedCourse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statsStarted, setStatsStarted] = useState(false);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   useEffect(() => {
     const loadHomeData = async () => {
@@ -200,16 +175,6 @@ export default function HomePage() {
     };
     loadHomeData();
   }, []);
-
-  useEffect(() => {
-    if (shouldReduceMotion) return;
-
-    const timer = window.setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 4600);
-
-    return () => window.clearInterval(timer);
-  }, [shouldReduceMotion]);
 
   const heroStats = useMemo(
     () => [
@@ -586,67 +551,6 @@ export default function HomePage() {
               </Button>
             </div>
           </div>
-        </div>
-      </motion.section>
-
-      {/* Testimonials */}
-      <motion.section
-        initial={shouldReduceMotion ? false : "hidden"}
-        whileInView={shouldReduceMotion ? undefined : "show"}
-        viewport={shouldReduceMotion ? undefined : inViewViewport}
-        variants={staggerContainer}
-        className="container mx-auto max-w-[1320px] px-4 py-10"
-      >
-        <motion.div variants={revealUpItem} className="mb-8 text-right">
-          <h2 className="text-3xl font-black text-[#111c3d]">آراء المتعلمين</h2>
-          <p className="mt-2 text-base font-medium text-slate-600">
-            تجارب حقيقية من طلاب يستخدمون منصة دال يوميًا.
-          </p>
-        </motion.div>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          {testimonials.map((item, index) => {
-            const isActive = activeTestimonial === index;
-
-            return (
-              <motion.article
-                key={item.id}
-                variants={revealUpItem}
-                whileHover={
-                  shouldReduceMotion
-                    ? undefined
-                    : {
-                        y: -3,
-                        boxShadow: "0 22px 42px -30px rgba(15,23,42,0.52)",
-                      }
-                }
-                className={`group flex h-full flex-col rounded-2xl border bg-white p-5 transition-all duration-300 ${
-                  isActive
-                    ? "border-indigo-200 shadow-[0_20px_42px_-30px_rgba(79,70,229,0.45)]"
-                    : "border-slate-100 shadow-[0_16px_36px_-28px_rgba(15,23,42,0.45)]"
-                }`}
-              >
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="rounded-full transition-all duration-300 group-hover:shadow-[0_0_0_5px_rgba(79,70,229,0.12)]">
-                    <Image
-                      src={item.avatar}
-                      alt={item.name}
-                      width={52}
-                      height={52}
-                      className={`rounded-full border object-cover ${
-                        isActive ? "border-indigo-200" : "border-slate-100"
-                      }`}
-                    />
-                  </div>
-                  <div className="text-right">
-                    <p className="font-black text-[#111c3d]">{item.name}</p>
-                    <p className="text-sm font-semibold text-indigo-600">{item.role}</p>
-                  </div>
-                </div>
-                <p className="text-sm leading-7 text-slate-600">{item.content}</p>
-              </motion.article>
-            );
-          })}
         </div>
       </motion.section>
 
