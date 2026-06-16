@@ -15,3 +15,5 @@ auth-backend/.env.*
 !auth-backend/.env.example
 .env
 .env.local
+
+.vercel
