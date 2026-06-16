@@ -49,8 +49,8 @@ const onTokenRefreshed = (token: string): void => {
  * Create Axios instance with base configuration
  */
 const apiClient: AxiosInstance = axios.create({
-    // Set NEXT_PUBLIC_API_URL in production; the local fallback matches the current dev backend.
-    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001',
+    // Keep API calls same-origin so browser cookies stay first-party in production.
+    baseURL: '',
     timeout: 30000,
     withCredentials: true, // Critical: Send HTTP-only cookies
     headers: {
@@ -135,13 +135,9 @@ apiClient.interceptors.response.use(
 
         try {
             // Call refresh token endpoint
-            const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001'}/api/auth/refresh`,
-                {},
-                {
-                    withCredentials: true, // Send HTTP-only cookie
-                }
-            );
+            const response = await axios.post('/api/auth/refresh', {}, {
+                withCredentials: true, // Send HTTP-only cookie
+            });
 
             // Backend returns { success, message, data: { accessToken } }
             const newAccessToken = response.data.data?.accessToken;

@@ -4,6 +4,14 @@ const publicApiUrl = process.env.NEXT_PUBLIC_API_URL || "https://api.example.com
 const publicApi = new URL(publicApiUrl);
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${publicApi.origin}/api/:path*`,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
