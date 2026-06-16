@@ -71,7 +71,7 @@ app.use(generalLimiter);
 
 // Serve uploaded files
 import path from 'path';
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Health check
 app.get('/health', (_req: Request, res: Response) => {
