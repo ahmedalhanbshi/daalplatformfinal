@@ -3,9 +3,13 @@ import path from 'path';
 import fs from 'fs';
 import { Request } from 'express';
 
+const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+
 export const uploadsDir = process.env.UPLOADS_DIR
     ? path.resolve(process.env.UPLOADS_DIR)
-    : path.join(process.cwd(), 'uploads');
+    : isProduction
+        ? path.resolve('/var/data/uploads')
+        : path.join(process.cwd(), 'uploads');
 
 function ensureUploadsDir() {
     if (!fs.existsSync(uploadsDir)) {
