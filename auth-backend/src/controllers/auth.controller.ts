@@ -30,6 +30,17 @@ function sanitizeAuthErrorMessage(message?: string): string {
     return message;
 }
 
+function getRefreshCookieOptions() {
+    const isProduction = process.env.NODE_ENV === 'production';
+    return {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: (isProduction ? 'none' : 'lax') as 'none' | 'lax',
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    };
+}
+
 export class AuthController {
     async register(req: Request, res: Response, _next: NextFunction) {
         try {
@@ -96,12 +107,7 @@ export class AuthController {
             }
 
             // Set refresh token in HTTP-only cookie
-            res.cookie('refreshToken', result.refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-            });
+            res.cookie('refreshToken', result.refreshToken, getRefreshCookieOptions());
 
             return sendSuccess(res, 'Login successful', {
                 accessToken: result.accessToken,
@@ -124,12 +130,7 @@ export class AuthController {
             const result = await authService.refreshToken({ refreshToken });
 
             // Update refresh token cookie
-            res.cookie('refreshToken', result.refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            });
+            res.cookie('refreshToken', result.refreshToken, getRefreshCookieOptions());
 
             return sendSuccess(res, 'Token refreshed successfully', {
                 accessToken: result.accessToken,
@@ -149,7 +150,7 @@ export class AuthController {
             }
 
             // Clear cookie
-            res.clearCookie('refreshToken');
+            res.clearCookie('refreshToken', { path: '/' });
 
             return sendSuccess(res, 'Logged out successfully');
         } catch (error: any) {
@@ -226,7 +227,7 @@ export class AuthController {
             const result = await authService.changePassword(userId, { currentPassword, newPassword });
             
             // Clear refresh token cookie on password change
-            res.clearCookie('refreshToken');
+            res.clearCookie('refreshToken', { path: '/' });
             
             return sendSuccess(res, result.message);
         } catch (error: any) {
